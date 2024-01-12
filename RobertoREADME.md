@@ -100,7 +100,7 @@ Questo frammento di configurazione sembra essere relativo a un router configurat
 In breve, questa configurazione stabilisce il router all'interno dell'AS 200, annuncia la rete 2.2.0.0/16, e configura le connessioni BGP con due vicini (2.255.0.4 e 2.255.0.5) nell'AS 200. Inoltre, stabilisce una connessione BGP con un vicino nell'AS 100 (10.0.12.1). La configurazione include anche istruzioni specifiche per l'indirizzo IP di origine degli aggiornamenti e per il next-hop delle rotte inviate ai vicini specifici.
 
 
-FASE DI CONTROLLO
+# FASE DI CONTROLLO della rete
 Come controllare i peer BGP e labella ip in un router, comandi:
 1) show ip bgp summary 
 
@@ -265,19 +265,19 @@ Il comando `show ip bgp` è utilizzato su dispositivi Cisco per visualizzare inf
 Questo comando è uno strumento fondamentale per monitorare lo stato delle rotte BGP sul router e può aiutare nella risoluzione dei problemi di routing, nell'analisi della selezione del percorso e nella comprensione della topologia di rete basata su BGP.
 
 
-Fase di testing, comando:
+# Fase di testing pingando il server 1.0.0.1, comando:
 
-ping 1.0.0.1 source 2.4.0.1
+ping 1.0.0.1 -I 2.4.0.1
 
 
-Il comando `ping 1.0.0.1 source 2.4.0.1` è un comando utilizzato per inviare pacchetti di controllo ICMP Echo Request (ping) a un indirizzo IP di destinazione specifico (1.0.0.1, nel tuo esempio) utilizzando un indirizzo IP di origine specifico (2.4.0.1, nel tuo esempio). Vediamo cosa fa ciascuna parte del comando:
+Il comando `ping 1.0.0.1 -I 2.4.0.1` è un comando utilizzato per inviare pacchetti di controllo ICMP Echo Request (ping) a un indirizzo IP di destinazione specifico (1.0.0.1, nel tuo esempio) utilizzando un indirizzo IP di origine specifico (2.4.0.1, nel tuo esempio). Vediamo cosa fa ciascuna parte del comando:
 
 - **ping:** Il comando "ping" è utilizzato per testare la connettività di rete tra il dispositivo sorgente e il dispositivo di destinazione. Invia pacchetti ICMP Echo Request e attende le risposte corrispondenti (Echo Reply).
 
 - **1.0.0.1:** È l'indirizzo IP di destinazione verso cui vengono inviati i pacchetti di ping. In questo caso, 1.0.0.1 è l'indirizzo IP del dispositivo di destinazione.
 
-- **source 2.4.0.1:** Specifica l'indirizzo IP di origine dei pacchetti di ping. I pacchetti di ping inviati al dispositivo di destinazione avranno 2.4.0.1 come indirizzo IP di origine.
+- **-I 2.4.0.1:** Specifica l'indirizzo IP di origine dei pacchetti di ping. I pacchetti di ping inviati al dispositivo di destinazione avranno 2.4.0.1 come indirizzo IP di origine.
 
-Quindi, nel complesso, il comando `ping 1.0.0.1 source 2.4.0.1` invia pacchetti di ping dall'indirizzo IP 2.4.0.1 all'indirizzo IP di destinazione 1.0.0.1. Questo può essere utilizzato per verificare se è possibile raggiungere il dispositivo di destinazione da un particolare indirizzo IP e se il percorso di andata e ritorno è funzionante. Se il dispositivo di destinazione risponde con successo, significa che la connessione è stabilita e funzionante. In caso contrario, potrebbero esserci problemi di connettività o configurazione nella rete.
+Quindi, nel complesso, il comando `ping 1.0.0.1 -I 2.4.0.1` invia pacchetti di ping dall'indirizzo IP 2.4.0.1 all'indirizzo IP di destinazione 1.0.0.1. Questo può essere utilizzato per verificare se è possibile raggiungere il dispositivo di destinazione da un particolare indirizzo IP e se il percorso di andata e ritorno è funzionante. Se il dispositivo di destinazione risponde con successo, significa che la connessione è stabilita e funzionante. In caso contrario, potrebbero esserci problemi di connettività o configurazione nella rete.
 
 
