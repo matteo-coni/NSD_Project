@@ -1,5 +1,5 @@
 # NSD_Project
-Lezione BGP basics
+# Lezione BGP basics
 Per evitare loop degli announcement BGP (tra i router di transito, ossia quelli interni), ad ogni router è associato un router id.
 
 Comandi 
@@ -280,4 +280,6 @@ Il comando `ping 1.0.0.1 -I 2.4.0.1` è un comando utilizzato per inviare pacche
 
 Quindi, nel complesso, il comando `ping 1.0.0.1 -I 2.4.0.1` invia pacchetti di ping dall'indirizzo IP 2.4.0.1 all'indirizzo IP di destinazione 1.0.0.1. Questo può essere utilizzato per verificare se è possibile raggiungere il dispositivo di destinazione da un particolare indirizzo IP e se il percorso di andata e ritorno è funzionante. Se il dispositivo di destinazione risponde con successo, significa che la connessione è stabilita e funzionante. In caso contrario, potrebbero esserci problemi di connettività o configurazione nella rete.
 
+
+# Lezione MPLS/BGP VPN
 
