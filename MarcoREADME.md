@@ -1,6 +1,6 @@
 #### AS100
 
-![](C:\Users\Marco\AppData\Roaming\marktext\images\2024-02-01-22-09-19-image.png)
+![](https://github.com/matteo-coni/NSD_Project/blob/f2abb6593bfed90706a49a7c3c1ed30fce509101/images/2024-02-01-22-09-19-image.png)
 
 - ##### R101
   
@@ -212,7 +212,7 @@
 
 #### AS200
 
-![](C:\Users\Marco\AppData\Roaming\marktext\images\2024-02-01-23-45-20-image.png)
+![](https://github.com/matteo-coni/NSD_Project/blob/f2abb6593bfed90706a49a7c3c1ed30fce509101/images/2024-02-01-23-45-20-image.png)
 
 - ##### R201
   
@@ -291,7 +291,7 @@
 
 #### AS300
 
-![](C:\Users\Marco\AppData\Roaming\marktext\images\2024-02-01-23-53-42-image.png)
+![](https://github.com/matteo-coni/NSD_Project/blob/f2abb6593bfed90706a49a7c3c1ed30fce509101/images/2024-02-01-23-53-42-image.png)
 
 - ##### R301
   
@@ -374,7 +374,7 @@
 
 #### AS400
 
-![](C:\Users\Marco\AppData\Roaming\marktext\images\2024-02-02-00-02-11-image.png)
+![](https://github.com/matteo-coni/NSD_Project/blob/f2abb6593bfed90706a49a7c3c1ed30fce509101/images/2024-02-02-00-02-11-image.png)
 
 - ##### R401
   
