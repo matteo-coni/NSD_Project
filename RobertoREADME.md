@@ -1,4 +1,58 @@
 # NSD_Project
+
+
+# LEZIONE OPENVPN - COMANDI
+vanno creati i certificati e poi si configura!
+Tali certificato e chiavi lui li ha creati nel server e poi ha fatto il paste nei rispettivi client (sia chiave che certificato)
+
+comandi OPENVPN - CREAZIONE DEI CERTIFICATI
+
+- `./easyrsa`: Questo indica che si sta eseguendo un'esecuzione locale di un file denominato "easyrsa". Il prefisso "./" sta ad indicare che il file si trova nella directory corrente.
+  
+- `build-server-full`: Questo è il comando specifico che si sta dando a EasyRSA. Sta dicendo a EasyRSA di costruire un certificato per un server completo, il che significa che verranno generati sia il certificato del server che la sua chiave privata.
+
+- `server`: Questo è il nome del server per il quale si sta generando il certificato. Potrebbe essere il nome di dominio del server o un identificatore univoco.
+
+- `nopass`: Questo parametro indica che il certificato verrà generato senza richiedere una passphrase. In altre parole, non verrà richiesta una password per utilizzare il certificato, il che potrebbe essere utile in alcune situazioni, ma potrebbe anche essere meno sicuro rispetto a utilizzare una passphrase.
+
+In breve, il comando `./easyrsa build-server-full server nopass` è un modo per generare un certificato completo per un server senza richiedere una passphrase utilizzando lo strumento EasyRSA.
+
+/----------/
+
+./easyrsa build-client-full client1 nopass:
+
+./easyrsa: Indica che si sta eseguendo un'esecuzione locale del file "easyrsa".
+build-client-full: È il comando specifico che dice a EasyRSA di costruire un certificato completo per un client, che include sia il certificato del client che la sua chiave privata.
+client1: È il nome del client per cui si sta generando il certificato. Potrebbe essere un identificatore univoco o un nome simbolico associato al client.
+nopass: Indica che il certificato verrà generato senza richiedere una passphrase. Questo significa che non verrà richiesta una password per utilizzare il certificato.
+./build-key client2:
+
+./build-key: Questo comando sembra essere un'esecuzione diretta di un altro script o strumento per la generazione delle chiavi. Tuttavia, senza conoscere il contesto o la natura dello script o dello strumento "build-key", è difficile fornire una spiegazione dettagliata. In generale, potrebbe essere un comando per generare un certificato per un altro client denominato "client2", ma senza ulteriori dettagli è difficile determinarlo con certezza.
+In sostanza, questi comandi sono direttive per generare certificati per due client, "client1" e "client2", utilizzando EasyRSA, con "nopass" indicante che i certificati verranno generati senza passphrase.
+
+
+///-----------///
+
+CONFIGURAZIONE DEL ROUTER 
+sysctl -w net.ipv4.ip_forward=1:
+
+Questo comando imposta la variabile di sistema net.ipv4.ip_forward su 1, abilitando il forwarding degli IP IPv4. Questo è un prerequisito per fare in modo che il sistema agisca come router, inoltrando i pacchetti tra le interfacce di rete.
+ip addr add 192.168.1.1/24 dev eth0:
+
+Questo comando aggiunge l'indirizzo IP 192.168.1.1/24 all'interfaccia di rete eth0. L'indirizzo IP appartiene alla sottorete 192.168.1.0/24.
+ip addr add 1.2.0.2/30 dev eth1:
+
+Questo comando aggiunge l'indirizzo IP 1.2.0.2/30 all'interfaccia di rete eth1. Questa configurazione definisce un'interfaccia con un indirizzo IP e una maschera di sottorete che consentono solo due indirizzi IP validi nella sottorete, 1.2.0.1 e 1.2.0.2.
+ip route add 1.0.0.0/24 via 1.2.0.1:
+
+Questo comando aggiunge una rotta per la sottorete 1.0.0.0/24 via l'indirizzo IP 1.2.0.1. Questo indica che i pacchetti destinati alla sottorete 1.0.0.0/24 devono essere inoltrati tramite l'interfaccia eth1.
+ip route add 2.2.0.0/30 via 1.2.0.1:
+
+Questo comando aggiunge una rotta per la sottorete 2.2.0.0/30 via l'indirizzo IP 1.2.0.1. Questo indica che i pacchetti destinati alla sottorete 2.2.0.0/30 devono essere inoltrati tramite l'interfaccia eth1.
+iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE:
+
+Questo comando configura le regole NAT (Network Address Translation) usando iptables. La regola specifica che i pacchetti in uscita attraverso l'interfaccia eth1 devono essere mascherati, sostituendo il loro indirizzo IP sorgente con l'indirizzo IP dell'interfaccia eth1. Questo è utile quando la macchina sta funzionando come gateway per permettere a dispositivi nella sottorete privata di accedere a Internet attraverso questa macchina.
+
 # Lezione BGP basics
 Per evitare loop degli announcement BGP (tra i router di transito, ossia quelli interni), ad ogni router è associato un router id.
 
