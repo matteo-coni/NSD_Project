@@ -243,15 +243,6 @@
                 "z": 2
             },
             {
-                "drawing_id": "b721cf02-f803-44fd-bb69-d5382995c440",
-                "locked": false,
-                "rotation": 0,
-                "svg": "<svg width=\"121\" height=\"50\"><text font-family=\"TypeWriter\" font-size=\"10.0\" font-weight=\"bold\" fill=\"#000000\" fill-opacity=\"1.0\">router id:\n1.255.0.1/32</text></svg>",
-                "x": -701,
-                "y": -351,
-                "z": 2
-            },
-            {
                 "drawing_id": "f4b6a5f2-ae10-45e5-9a83-54efa56d0d39",
                 "locked": false,
                 "rotation": 0,
@@ -1138,38 +1129,6 @@
                     }
                 ],
                 "suspend": false
-            },
-            {
-                "filters": {},
-                "link_id": "a94a2fbb-2830-43e1-b95c-de41e6f8fec3",
-                "link_style": {},
-                "nodes": [
-                    {
-                        "adapter_number": 0,
-                        "label": {
-                            "rotation": 0,
-                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                            "text": "mgmt",
-                            "x": 63,
-                            "y": -12
-                        },
-                        "node_id": "ddd51d73-af8d-430c-9553-f3c6a3987ccc",
-                        "port_number": 0
-                    },
-                    {
-                        "adapter_number": 0,
-                        "label": {
-                            "rotation": 0,
-                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                            "text": "eth0",
-                            "x": 16,
-                            "y": 61
-                        },
-                        "node_id": "8c8b7225-5d9c-41d0-8d5f-c0bd6a3c204c",
-                        "port_number": 0
-                    }
-                ],
-                "suspend": false
             }
         ],
         "nodes": [
@@ -1925,45 +1884,6 @@
                 "width": 60,
                 "x": 640,
                 "y": 352,
-                "z": 1
-            },
-            {
-                "compute_id": "local",
-                "console": null,
-                "console_auto_start": false,
-                "console_type": "none",
-                "custom_adapters": [],
-                "first_port_name": "mgmt",
-                "height": 60,
-                "label": {
-                    "rotation": 0,
-                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                    "text": "A1",
-                    "x": 19,
-                    "y": -25
-                },
-                "locked": false,
-                "name": "A1",
-                "node_id": "ddd51d73-af8d-430c-9553-f3c6a3987ccc",
-                "node_type": "virtualbox",
-                "port_name_format": "swp{port1}",
-                "port_segment_size": 0,
-                "properties": {
-                    "adapter_type": "Intel PRO/1000 MT Desktop (82540EM)",
-                    "adapters": 8,
-                    "headless": false,
-                    "linked_clone": false,
-                    "on_close": "power_off",
-                    "ram": 2048,
-                    "usage": "",
-                    "use_any_adapter": false,
-                    "vmname": "cumulus-linux-4.1.0-vx-amd64-1584996322.6aca396zdd3fc1f8"
-                },
-                "symbol": ":/symbols/affinity/circle/green/client.svg",
-                "template_id": "ef2a831d-ae51-40d0-b93e-c92f4cd73594",
-                "width": 60,
-                "x": 205,
-                "y": 483,
                 "z": 1
             }
         ]
