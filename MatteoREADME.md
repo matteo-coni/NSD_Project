@@ -1,6 +1,8 @@
 - AS100 (entrare prima in vtysh e scrivere conf t) NB: visualizza interfacce con "show int bri"
 
-	R101: interface lo
+	R101:
+
+		interface lo
 			ip address 1.1.0.1/16
 			ip address 1.255.0.1/32
 
@@ -29,7 +31,8 @@
 		   
 
 
-	R102: interface lo
+	R102:
+		interface lo
 			ip address 1.2.0.1/16
 			ip address 1.255.0.2/32
 			
@@ -60,7 +63,8 @@
 
 
 
-	R103: interface lo
+	R103:
+		interface lo
 			ip address 1.3.0.1/16
 			ip address 1.255.0.3/32
 
@@ -86,7 +90,9 @@
 
 - AS200
 
-	R201: interface lo
+	R201:
+
+		interface lo
 			ip address 2.1.0.1/16
 			ip address 2.255.0.1/32
 
@@ -116,7 +122,8 @@
 
 
 
-	R202: interface lo
+	R202:
+		interface lo
 			ip address 2.2.0.1/16
 			ip address 2.255.0.2/32
 
@@ -143,7 +150,8 @@
 
 - AS300
 
-	R301: interface lo
+	R301:
+		interface lo
 			ip address 3.1.0.1/16
 			ip address 3.255.0.1/32
 
@@ -171,7 +179,8 @@
 		  network 3.255.0.1/32 area 0
 		  network 10.0.34.0/30 area 0
 
-	R302: interface lo
+	R302:
+		interface lo
 			ip address 3.2.0.1/16
 			ip address 3.255.0.2/32
 
@@ -207,7 +216,8 @@
 
 - AS400
 	
-	R401: interface lo
+	R401:
+		interface lo
 			ip address 4.1.0.1/16
 			ip address 4.255.0.1/32
 
