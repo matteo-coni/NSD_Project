@@ -2,7 +2,7 @@
 
 #### BGP
 
-Spiegazione BGP ed il perche lo abbiamo usato
+Protocollo di tipo EGP....
 
 #### OSPF
 
@@ -20,7 +20,9 @@ Spiegazione OSPF ed il perche lo abbiamo usato
 > 
 > - Configure LDP/MPLS in the core network
 
-Dato... che spiegare la question del full mesh... usiamo MPLS
+Per garantire che il routing all'interno dell'AS avvenga in modo ordinato, evitando loop di routing e mantenendo la coerenza della tabella di routing una rotta appresa tramite iBGP non viene mai propagata ad altri peer iBGP non adiacenti. In particolar modo essendo la topologia dell'`AS200` *non full mesh di sessioni iBGP ed essendo sprovvista di BGP Route Reflector*, si utilizza il protocollo MPLS.
+
+MPLS è un protocollo per la distribuzione delle rotte la quale idea chiave è quella di associare un identificatore, chiamato *label*, ad ogni pacchetto per semplificare il loro routing e migliorare l'efficienza del loro trasporto attraverso la rete.
 
 ##### MPLS - Initialization
 
@@ -45,7 +47,39 @@ show mpls status
 
 che se installati correttamente mostra il messaggio `MPLS support enabled: yes`
 
-Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con la configurazione delle singole stazioni all'interno dell'Autonomous System
+Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si scrive all'interno del file di configurazione `/etc/sysctl.conf`, per ogni stazione che fa uso di MPLS, tramite il comando
+
+```shell
+vi /etc/sysctl.conf
+```
+
+i seguenti parametri in modo tale da abilitare le interfacce che possono accettare i pacchetti MPLS ed impostare il numero di label che possono essere usate
+
+```shell
+#per R101
+net.mpls.conf.lo.input = 1
+net.mpls.conf.eth1.input = 1
+net.mpls.platform_labels = 100000
+
+#per R102
+net.mpls.conf.lo.input = 1
+net.mpls.conf.eth0.input = 1
+net.mpls.conf.eth1.input = 1
+net.mpls.platform_labels = 100000
+
+#per R103
+net.mpls.conf.lo.input = 1
+net.mpls.conf.eth1.input = 1
+net.mpls.platform_labels = 100000
+```
+
+al termine di ogni configurazione, per apportare le modifiche utilizzo il comando
+
+```shell
+sysctl -p
+```
+
+Dopo aver inizializzato MPLS si procede con la configurazione delle singole stazioni all'interno dell'Autonomous System
 
 - ##### R101
   
@@ -352,51 +386,51 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   
   ```shell
   interface eth0
-  	 ip address 2.0.23.1/30
-  	exit
-  	!
-  	interface eth1
-  	 ip address 10.0.21.1/30
-  	exit
-  	!
-  	interface lo
-  	 ip address 2.2.0.1/16
-  	 ip address 2.255.0.2/32
-  	exit
-  	!
+       ip address 2.0.23.1/30
+      exit
+      !
+      interface eth1
+       ip address 10.0.21.1/30
+      exit
+      !
+      interface lo
+       ip address 2.2.0.1/16
+       ip address 2.255.0.2/32
+      exit
+      !
   ```
   
   Si configura il protocollo OSPF
   
   ```shell
   router ospf
-  	 ospf router-id 2.255.0.2
-  	 network 2.0.0.0/8 area 0
-  	 network 2.0.23.0/30 area 0
-  	 network 2.2.0.0/16 area 0
-  	 network 2.255.0.2/32 area 0
-  	 network 10.0.21.0/30 area 0
-  	exit
-  	!
+       ospf router-id 2.255.0.2
+       network 2.0.0.0/8 area 0
+       network 2.0.23.0/30 area 0
+       network 2.2.0.0/16 area 0
+       network 2.255.0.2/32 area 0
+       network 10.0.21.0/30 area 0
+      exit
+      !
   ```
   
   Si configura il protocollo BGP
   
   ```shell
   router bgp 200
-  	 neighbor 2.0.23.2 remote-as 200
-  	 neighbor 2.0.23.2 update-source 2.2.0.1
-  	 neighbor 2.255.0.1 remote-as 200
-  	 neighbor 2.255.0.1 update-source 2.255.0.2
-  	 !
-  	 address-family ipv4 unicast
-  	  network 2.0.0.0/8
-  	  network 2.2.0.0/16
-  	  neighbor 2.0.23.2 next-hop-self
-  	  neighbor 2.255.0.1 next-hop-self
-  	 exit-address-family
-  	exit
-  	!
+       neighbor 2.0.23.2 remote-as 200
+       neighbor 2.0.23.2 update-source 2.2.0.1
+       neighbor 2.255.0.1 remote-as 200
+       neighbor 2.255.0.1 update-source 2.255.0.2
+       !
+       address-family ipv4 unicast
+        network 2.0.0.0/8
+        network 2.2.0.0/16
+        neighbor 2.0.23.2 next-hop-self
+        neighbor 2.255.0.1 next-hop-self
+       exit-address-family
+      exit
+      !
   ```
   
   Forse prova potrebbe funziona anche senza ??
