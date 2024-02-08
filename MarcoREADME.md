@@ -47,39 +47,7 @@ show mpls status
 
 che se installati correttamente mostra il messaggio `MPLS support enabled: yes`
 
-Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si scrive all'interno del file di configurazione `/etc/sysctl.conf`, per ogni stazione che fa uso di MPLS, tramite il comando
-
-```shell
-vi /etc/sysctl.conf
-```
-
-i seguenti parametri in modo tale da abilitare le interfacce che possono accettare i pacchetti MPLS ed impostare il numero di label che possono essere usate
-
-```shell
-#per R101
-net.mpls.conf.lo.input = 1
-net.mpls.conf.eth1.input = 1
-net.mpls.platform_labels = 100000
-
-#per R102
-net.mpls.conf.lo.input = 1
-net.mpls.conf.eth0.input = 1
-net.mpls.conf.eth1.input = 1
-net.mpls.platform_labels = 100000
-
-#per R103
-net.mpls.conf.lo.input = 1
-net.mpls.conf.eth1.input = 1
-net.mpls.platform_labels = 100000
-```
-
-al termine di ogni configurazione, per apportare le modifiche utilizzo il comando
-
-```shell
-sysctl -p
-```
-
-Dopo aver inizializzato MPLS si procede con la configurazione delle singole stazioni all'interno dell'Autonomous System
+Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con la configurazione delle singole stazioni all'interno dell'Autonomous System
 
 - ##### R101
   
@@ -134,7 +102,21 @@ Dopo aver inizializzato MPLS si procede con la configurazione delle singole staz
   !
   ```
   
-  Si configura MPLS seguito dal terminatore `end`
+  Si configura MPLS, dove per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` i seguenti parametri
+  
+  ```shell
+  net.mpls.conf.lo.input = 1
+  net.mpls.conf.eth1.input = 1
+  net.mpls.platform_labels = 100000
+  ```
+  
+  applicando le seguenti modifiche tramite il comando
+  
+  ```shell
+  sysctl -p
+  ```
+  
+  successivamente si configura LDP (Label Distribution Protocol) sul router
   
   ```shell
   mpls ldp
@@ -154,7 +136,6 @@ Dopo aver inizializzato MPLS si procede con la configurazione delle singole staz
    !
   exit
   !
-  end
   ```
   
   *lorem ipsum*
@@ -196,7 +177,22 @@ Dopo aver inizializzato MPLS si procede con la configurazione delle singole staz
   !
   ```
   
-  Si configura MPLS seguito dal terminatore `end`
+  Si configura MPLS, dove per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` i seguenti parametri
+  
+  ```shell
+  net.mpls.conf.lo.input = 1
+  net.mpls.conf.eth0.input = 1
+  net.mpls.conf.eth1.input = 1
+  net.mpls.platform_labels = 100000
+  ```
+  
+  applicando le seguenti modifiche tramite il comando
+  
+  ```shell
+  sysctl -p
+  ```
+  
+  successivamente si configura il protocollo LDP sul router
   
   ```shell
   mpls ldp
@@ -219,7 +215,6 @@ Dopo aver inizializzato MPLS si procede con la configurazione delle singole staz
    !
   exit
   !
-  end
   ```
   
   *lorem ipsum*
@@ -277,7 +272,21 @@ Dopo aver inizializzato MPLS si procede con la configurazione delle singole staz
   !
   ```
   
-  Si configura MPLS seguito dal terminatore `end`
+  Si configura MPLS, dove per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` i seguenti parametri
+  
+  ```shell
+  net.mpls.conf.lo.input = 1
+  net.mpls.conf.eth1.input = 1
+  net.mpls.platform_labels = 100000
+  ```
+  
+  applicando le seguenti modifiche tramite il comando
+  
+  ```shell
+  sysctl -p
+  ```
+  
+  successivamente si configura il protocollo LDP sul router
   
   ```shell
   mpls ldp
@@ -297,7 +306,6 @@ Dopo aver inizializzato MPLS si procede con la configurazione delle singole staz
    !
   exit
   !
-  end
   ```
   
   *lorem ipsum*
@@ -635,11 +643,14 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
 
 - ##### GW300
   
-  Si procede con la configurazione delle interfacce `eth0`, `eth1` e di loopback `lo`
+  Si procede con la configurazione dell'interfaccia `eth2`, della default route verso `R302` con la conseguente abilitazione per il forwarding degli indirizzi IP
   
-  asdasd
-  
-  asdasd
+  ```shell
+  ip addr add 3.0.23.2/30 dev eth2
+  ip route add default via 3.0.23.1
+   
+  sysctl -w net.ipv4.ip_forward=1
+  ```
   
   asdsad
   
