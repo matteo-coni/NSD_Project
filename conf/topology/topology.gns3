@@ -432,15 +432,6 @@
                 "z": 2
             },
             {
-                "drawing_id": "7e607f1a-5f53-43d8-9dce-3b437f3b66cc",
-                "locked": false,
-                "rotation": 0,
-                "svg": "<svg width=\"76\" height=\"20\"><text font-family=\"TypeWriter\" font-size=\"10.0\" font-weight=\"bold\" fill=\"#000000\" fill-opacity=\"1.0\">10.0.32.0/30</text></svg>",
-                "x": -571,
-                "y": 188,
-                "z": 2
-            },
-            {
                 "drawing_id": "c9308af2-99f6-4d03-b41b-bcd981b48f97",
                 "locked": false,
                 "rotation": 0,
@@ -1222,7 +1213,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "2d368f7aadd6d8b6d4c56357165ae7afe2a7ae88376e38a52da387c4771b0ca5",
+                    "container_id": "767425510fdfccb34c777fd932fd449e5c867b9f00eeb1144c4ff970f7d54048",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
@@ -1267,7 +1258,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "db425e0ac2507ac66b56b21d76451219859be15e22c908f178231b328760bd28",
+                    "container_id": "4ce173568aeda48c984839e08c0b48b265bea01de531ee1b46857dcbfb75afc8",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
@@ -1312,7 +1303,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "be0b55931e3a50b73cc8b4c818d4d4ccaec3ec5948fd7ab9de7dd43b05470b55",
+                    "container_id": "1d426138d43865d30849c713b25f647868a584f5ee21abcebd708fc1ca820ca8",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
@@ -1326,7 +1317,7 @@
                 "symbol": ":/symbols/affinity/circle/red/router.svg",
                 "template_id": "51f7c3c8-c96e-4f48-b24d-30d21ed7674d",
                 "width": 60,
-                "x": -817,
+                "x": -819,
                 "y": -312,
                 "z": 1
             },
@@ -1357,7 +1348,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "4e9da2befcd0ed98bf7748e48f1aad423b35c0d41a36cfd4cf47197eadbd431a",
+                    "container_id": "691a6925c1dbdd8baaac0bc44076f5a06106f180c60940999021228f53a0df10",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
@@ -1402,7 +1393,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "2f0a60ea32d0b9ed21fc05d6de10dea6e1fd7b8be8b75d5c5009beab2c6ad8b0",
+                    "container_id": "41dd50b0f2b7cc4945c1996912c4bb8292fb33abb1851b7bcb7fb566319f027f",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
@@ -1447,7 +1438,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "0ad4e7ed003dd314205c6b7b5e2e29ded381f85bbc19c121035e9e0a6a80f088",
+                    "container_id": "b15f8d691cf66f865c09da6a00501caca647d38f2a51842815ed6b9b2516a709",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
@@ -1492,7 +1483,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "4d68a024d4dff6096dc93d5391437a0a93eaa53bb65c2dbc1badb4f0816a1add",
+                    "container_id": "3f05a50356f157770b2bfe93c63287fe297db38263f151057a361787358ec2b5",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
@@ -1537,7 +1528,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "b307fed21df7b35fc9abb9556b8862c322df310db97e9550fb8fe16ee3afc925",
+                    "container_id": "e0e25ecb9b72c4fc151914a66e0ee7fcff7dc8368b5ebe582dd3fafd51eeaf1b",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
@@ -1582,7 +1573,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "4d48ce8d97e900fed96b65ce4c73cd31bf6e94902d0eecc195870def56b05249",
+                    "container_id": "3a766dfc2af0a29b157b7954a4b54d253dd035a16e99ce3d4989f0204e71c873",
                     "environment": "",
                     "extra_hosts": "",
                     "extra_volumes": [],
@@ -1624,7 +1615,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "1ade3336e9c6728c0adef1bc4078e208fbecb1f171110365a6cd7307b30baa15",
+                    "container_id": "6a5722d802c4abf47e4fdba16ce880d70cd08cb1ca19831136362736803d4bd8",
                     "environment": "",
                     "extra_hosts": "",
                     "extra_volumes": [],
@@ -1666,7 +1657,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "79199e03cfda3d75262a34ceb5388e9925d2fb7df76352286220a3a589a8285a",
+                    "container_id": "8c6c859bf7a2b8045b92ac72221f9a4de77bdfc09426ead788d1a2a1f0cd7c4c",
                     "environment": "",
                     "extra_hosts": "",
                     "extra_volumes": [
@@ -1710,7 +1701,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "aadd3b9c686bb06d03088242ba6ea8386308f1cf8e51f4b3fe78af6d28e13e2a",
+                    "container_id": "60095f5a8ac43f3c48e8590d8573eabeb4dc02099ba402b5f3e37c155abdc8a8",
                     "environment": "",
                     "extra_hosts": "",
                     "extra_volumes": [],
@@ -1752,7 +1743,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "6d6665fdf0621a53589eb43e45d0b0c17f840ed60c753441f80e10ae2b42004d",
+                    "container_id": "4d8c64f601c60b56450f21b8f17038d018f5da14a64cc310752527dc29866547",
                     "environment": "",
                     "extra_hosts": "",
                     "extra_volumes": [
@@ -1796,7 +1787,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "89502196abc6f353ac99aef1b2f34fb018f1994659bd489d6bf2a1001846c52d",
+                    "container_id": "1cf82bbc974aef8019b4011535f6cf3a497d1ab54af3271140e21fb967b381b8",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
@@ -1841,7 +1832,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "5666f67a6524c6e16644a4ffa46c57727953c72c6ab4eba988d7cd8d11dad182",
+                    "container_id": "33fa07686957f79381f5e49188e8fd0e7ae25d1c0b9787b9516ea4bbba4efa71",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
@@ -1886,7 +1877,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "a16bbaec1b1c42758da5fd996c6fc6ea55e04532ee9228c30dc4907af5c736d2",
+                    "container_id": "c7f5e2edac25c18d26e3f5819efc9bdfb1737829dca484c15137197d4a58d0a7",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
@@ -1931,7 +1922,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "c379a097877314630d6e97c50bea26bdb08c4b18b9928c3207f53410ddd3bce3",
+                    "container_id": "c4970be9da216d90ea459f2d6ddd441b4e152985ad14948e5d53832a6129b725",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
