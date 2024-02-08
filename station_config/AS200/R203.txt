@@ -1,0 +1,15 @@
+ip addr add 192.168.200.1/24 dev eth1
+	ip addr add 2.0.23.2/30 dev eth0
+	ip route add default via 2.0.23.1
+
+	sysctl -w net.ipv4.ip_forward=1
+
+	export LAN=eth1 #comandi per specificare il nome associato alle interfacce
+ 	export NET=eth0     
+ 		
+ 	#regola1 permette solo il traffico iniziato dalla lan verso l'as200 e oltre
+ 	#regola2 permette il traffico associato a connessione gia stabilite
+ 	iptables -A FORWARD -i $LAN -o $NET -j ACCEPT
+	iptables -A FORWARD -m state --state ESTABLISHED -j ACCEPT
+
+	iptables -t nat -A POSTROUTING -o $NET -j MASQUERADE #abilita il NAT mascherando l'indirizzo 	vero con quello di $NET
