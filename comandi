@@ -17,7 +17,7 @@
 			#eBGP
 			neighbor 10.0.22.1 remote-as 200 
 			#iBGP
-			network 1.1.0.1/16
+			network 1.0.0.0/8 #network 1.1.0.1/16
 			neighbor 1.255.0.2 remote-as 100
 			neighbor 1.255.0.2 update-source 1.255.0.1
 			neighbor 1.255.0.2 next-hop-self
@@ -133,9 +133,9 @@
 		router bgp 100
 		network 1.3.0.1/16
 		neighbor 10.0.33.2 remote-as 300
-		neighbor 1.255.0.2 remote-as 100
-		neighbor 1.255.0.2 update-source 1.255.0.3
-		neighbor 1.255.0.2 next-hop-self 
+		neighbor 1.255.0.1 remote-as 100
+		neighbor 1.255.0.1 update-source 1.255.0.3
+		neighbor 1.255.0.1 next-hop-self 
 
 		router ospf
 		  router-id 1.255.0.3
@@ -278,7 +278,7 @@
 
 		  #eBGP
 		  router bgp 300
-		  network 3.1.0.1/16	
+		  network 3.0.0.0/8	
 		  neighbor 10.0.33.1 remote-as 100
 
 		  #iBGP
@@ -310,7 +310,7 @@
 
 		  #eBGP
 		  router bgp 300
-		  network 3.2.0.1/16	
+		  network 3.0.0.0/8	
 		  neighbor 10.0.44.2 remote-as 400
 
 		  #iBGP
@@ -322,7 +322,7 @@
 		  #ospf
 		  router ospf
 		  router-id 3.255.0.2
-		  network 3.2.0.1/16 area 0
+		  network 3.2.0.0/16 area 0
 		  network 3.255.0.2/32 area 0
 		  network 10.0.34.0/30 area 0
 		  network 10.0.32.0/30 area 0
@@ -335,27 +335,32 @@
 			ip address 4.255.0.1/32
 
 		  interface eth0
-		  	ip address 10.0.40.2/30
+		  	ip address 4.0.12.2/30
 
 		  interface eth1
 		    ip address 10.0.44.2/30
 
 		  #eBGP
 		  router bgp 400
-		  network 4.1.0.1/16	
+		  network 4.0.0.0/8
+		  network 4.1.0.0/16
+
 		  neighbor 10.0.44.1 remote-as 300
 
 		  #prova iBGP vedi bene
-		  neighbor 4.2.0.1 remote-as 400
-		  neighbor 4.2.0.1 update-source 4.1.0.1
-		  neighbor 4.2.0.1 next-hop-self
+		  neighbor 4.0.12.1 remote-as 400
+		  neighbor 4.0.12.1 update-source 4.1.0.1
+		  neighbor 4.0.12.1 next-hop-self
 
 		  #ospf
 		  router ospf
-		  router-id 4.255.0.2
-		  network 4.2.0.1/16 area 0
-		  network 4.255.0.2/32 area 0
-		  network 10.0.40.0 area 0
+		  router-id 4.255.0.1
+		  network 4.0.0.0/8 area 0
+		  network 4.1.0.0/16 area 0
+		  network 4.255.0.1/32 area 0
+		  network 4.0.12.0/30 area 0
+
+		  
 
 	R402: 
 		ip addr add 192.168.40.1/24 dev eth1

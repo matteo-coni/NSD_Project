@@ -1,0 +1,412 @@
+R101:
+
+interface eth0
+ ip address 10.0.22.2/30
+exit
+!
+interface eth1
+ ip address 10.0.23.1/30
+ mpls enable
+exit
+!
+interface lo
+ ip address 1.1.0.1/8
+ ip address 1.255.0.1/32
+ mpls enable
+exit
+!
+router bgp 100
+ neighbor 1.3.0.1 remote-as 100
+ neighbor 1.3.0.1 update-source 1.1.0.1
+ neighbor 1.255.0.3 remote-as 100
+ neighbor 1.255.0.3 update-source 1.255.0.1
+ neighbor 10.0.22.1 remote-as 200
+ !
+ address-family ipv4 unicast
+  network 1.0.0.0/8
+  neighbor 1.3.0.1 next-hop-self
+  neighbor 1.255.0.3 next-hop-self
+ exit-address-family
+exit
+!
+router ospf
+ ospf router-id 1.255.0.1
+ network 1.1.0.0/16 area 0
+ network 1.255.0.1/32 area 0
+ network 10.0.23.0/30 area 0
+exit
+!
+mpls ldp
+ router-id 1.255.0.1
+ ordered-control
+ !
+ address-family ipv4
+  discovery transport-address 1.255.0.1
+  !
+  interface eth1
+  exit
+  !
+  interface lo
+  exit
+  !
+ exit-address-family
+ !
+exit
+!
+end
+
+
+R102: 
+
+interface eth0
+ ip address 10.0.23.2/30
+ mpls enable
+exit
+!
+interface eth1
+ ip address 10.0.24.1/30
+ mpls enable
+exit
+!
+interface lo
+ ip address 1.2.0.1/16
+ ip address 1.255.0.2/32
+ mpls enable
+exit
+!
+router ospf
+ ospf router-id 1.255.0.2
+ network 0.0.0.0/0 area 0
+ network 1.2.0.0/16 area 0
+ network 1.255.0.2/32 area 0
+ network 10.0.23.0/30 area 0
+ network 10.0.24.0/30 area 0
+exit
+!
+mpls ldp
+ router-id 1.255.0.2
+ ordered-control
+ !
+ address-family ipv4
+  discovery transport-address 1.255.0.2
+  !
+  interface eth0
+  exit
+  !
+  interface eth1
+  exit
+  !
+  interface lo
+  exit
+  !
+ exit-address-family
+ !
+exit
+!
+end
+
+R103:
+
+interface eth0
+ ip address 10.0.33.1/30
+exit
+!
+interface eth1
+ ip address 10.0.24.2/30
+ mpls enable
+exit
+!
+interface lo
+ ip address 1.255.0.3/32
+ ip address 1.3.0.1/16
+ mpls enable
+exit
+!
+router bgp 100
+ neighbor 1.1.0.1 remote-as 100
+ neighbor 1.1.0.1 update-source 1.3.0.1
+ neighbor 1.255.0.1 remote-as 100
+ neighbor 1.255.0.1 update-source 1.255.0.3
+ neighbor 10.0.33.2 remote-as 300
+ !
+ address-family ipv4 unicast
+  network 1.0.0.0/8
+  neighbor 1.1.0.1 next-hop-self
+  neighbor 1.255.0.1 next-hop-self
+ exit-address-family
+exit
+!
+router ospf
+ ospf router-id 1.255.0.3
+ network 1.3.0.0/16 area 0
+ network 1.255.0.3/32 area 0
+ network 10.0.24.0/30 area 0
+exit
+!
+mpls ldp
+ router-id 1.255.0.3
+ ordered-control
+ !
+ address-family ipv4
+  discovery transport-address 1.255.0.3
+  !
+  interface eth1
+  exit
+  !
+  interface lo
+  exit
+  !
+ exit-address-family
+ !
+exit
+!
+end
+
+CLIENT-200:
+ip addr add 192.168.200.2/24 dev eth1
+ip route add default via 192.168.200.1
+
+R201:
+
+interface eth0
+ ip address 10.0.22.1/30
+exit
+!
+interface eth1
+ ip address 10.0.21.2/30
+exit
+!
+interface lo
+ ip address 2.1.0.1/16
+ ip address 2.1.0.1/8
+ ip address 2.255.0.1/32
+exit
+!
+router bgp 200
+ neighbor 2.255.0.2 remote-as 200
+ neighbor 2.255.0.2 update-source 2.255.0.1
+ neighbor 10.0.22.2 remote-as 100
+ !
+ address-family ipv4 unicast
+  network 2.0.0.0/8
+  network 2.1.0.0/16
+  neighbor 2.255.0.2 next-hop-self
+ exit-address-family
+exit
+!
+router ospf
+ ospf router-id 2.255.0.1
+ network 2.0.0.0/8 area 0
+ network 2.1.0.0/16 area 0
+ network 2.255.0.1/32 area 0
+ network 10.0.21.0/30 area 0
+exit
+!
+end
+
+
+R202:
+	interface eth0
+	 ip address 2.0.23.1/30
+	exit
+	!
+	interface eth1
+	 ip address 10.0.21.1/30
+	exit
+	!
+	interface lo
+	 ip address 2.2.0.1/16
+	 ip address 2.255.0.2/32
+	exit
+	!
+	router bgp 200
+	 neighbor 2.0.23.2 remote-as 200
+	 neighbor 2.0.23.2 update-source 2.2.0.1
+	 neighbor 2.255.0.1 remote-as 200
+	 neighbor 2.255.0.1 update-source 2.255.0.2
+	 !
+	 address-family ipv4 unicast
+	  network 2.0.0.0/8
+	  network 2.2.0.0/16
+	  neighbor 2.0.23.2 next-hop-self
+	  neighbor 2.255.0.1 next-hop-self
+	 exit-address-family
+	exit
+	!
+	router ospf
+	 ospf router-id 2.255.0.2
+	 network 2.0.0.0/8 area 0
+	 network 2.0.23.0/30 area 0
+	 network 2.2.0.0/16 area 0
+	 network 2.255.0.2/32 area 0
+	 network 10.0.21.0/30 area 0
+	exit
+	!
+
+	sysctl -w net.ipv4.ip_forward=1 
+
+
+R203:
+	ip addr add 192.168.200.1/24 dev eth1
+	ip addr add 2.0.23.2/30 dev eth0
+	ip route add default via 2.0.23.1
+
+	sysctl -w net.ipv4.ip_forward=1
+
+	export LAN=eth1 #comandi per specificare il nome associato alle interfacce
+ 	export NET=eth0     
+ 		
+ 	#regola1 permette solo il traffico iniziato dalla lan verso l'as200 e oltre
+ 	#regola2 permette il traffico associato a connessione gia stabilite
+ 	iptables -A FORWARD -i $LAN -o $NET -j ACCEPT
+	iptables -A FORWARD -m state --state ESTABLISHED -j ACCEPT
+
+	iptables -t nat -A POSTROUTING -o $NET -j MASQUERADE #abilita il NAT mascherando l'indirizzo 	vero con quello di $NET
+
+
+R301:
+
+interface eth0
+ ip address 10.0.33.2/30
+exit
+!
+interface eth1
+ ip address 10.0.34.1/30
+exit
+!
+interface lo
+ ip address 3.1.0.1/16
+ ip address 3.255.0.1/32
+exit
+!
+router bgp 300
+ neighbor 3.0.23.2 remote-as 300
+ neighbor 3.0.23.2 update-source 3.255.0.1
+ neighbor 3.255.0.2 remote-as 300
+ neighbor 3.255.0.2 update-source 3.255.0.1
+ neighbor 10.0.33.1 remote-as 100
+ !
+ address-family ipv4 unicast
+  network 3.0.0.0/8
+  network 3.1.0.0/16
+  neighbor 3.0.23.2 next-hop-self
+  neighbor 3.255.0.2 next-hop-self
+ exit-address-family
+exit
+!
+router ospf
+ ospf router-id 3.255.0.1
+ network 3.0.0.0/16 area 0
+ network 3.1.0.0/16 area 0
+ network 3.255.0.1/32 area 0
+ network 10.0.34.0/30 area 0
+exit
+!
+end
+
+
+
+R302:
+
+interface eth0
+ ip address 10.0.34.2/30
+exit
+!
+interface eth1
+ ip address 10.0.44.1/30
+exit
+!
+interface eth2
+ ip address 3.0.23.1/30
+exit
+!
+interface lo
+ ip address 3.2.0.1/8
+ ip address 3.255.0.2/32
+exit
+!
+router bgp 300
+ neighbor 3.0.23.2 remote-as 300
+ neighbor 3.0.23.2 update-source 3.2.0.1
+ neighbor 3.255.0.1 remote-as 300
+ neighbor 3.255.0.1 update-source 3.255.0.2
+ neighbor 10.0.44.2 remote-as 400
+ !
+ address-family ipv4 unicast
+  network 3.0.0.0/8
+  network 3.2.0.0/16
+  neighbor 3.0.23.2 next-hop-self
+  neighbor 3.255.0.1 next-hop-self
+ exit-address-family
+exit
+!
+router ospf
+ ospf router-id 3.255.0.2
+ network 3.0.0.0/8 area 0
+ network 3.0.23.0/30 area 0
+ network 3.2.0.0/16 area 0
+ network 3.255.0.2/32 area 0
+ network 10.0.34.0/30 area 0
+exit
+!
+end
+
+
+
+
+R401: 
+
+interface eth0
+ ip address 4.0.12.2/30
+exit
+!
+interface eth1
+ ip address 10.0.44.2/30
+exit
+!
+interface lo
+ ip address 4.1.0.1/8
+ ip address 4.255.0.1/32
+exit
+!
+router bgp 400
+ neighbor 10.0.44.1 remote-as 300
+ !
+ address-family ipv4 unicast
+  network 4.0.0.0/8
+  network 4.1.0.0/16
+ exit-address-family
+exit
+!
+router ospf
+ ospf router-id 4.255.0.1
+ network 4.0.0.0/8 area 0
+ network 4.0.12.0/30 area 0
+ network 4.1.0.0/16 area 0
+ network 4.255.0.1/32 area 0
+exit
+!
+end
+
+
+
+R402:
+
+ip addr add 192.168.40.1/24 dev eth1
+		ip addr add 4.0.12.1/30 dev eth0
+		ip route add default via 4.0.12.2
+
+		sysctl -w net.ipv4.ip_forward=1 
+
+
+		export NET=eth0
+		iptables -t nat -A POSTROUTING -o $NET -j MASQUERADE #abilita il NAT
+
+CLIENT-400:
+
+		ip addr add 192.168.40.2/24 dev eth1 
+		ip route add default via 192.168.40.1
+
+
+
+
