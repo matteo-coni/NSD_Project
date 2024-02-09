@@ -1,0 +1,17 @@
+N.B: prima di iniziare a configurare cumulus esegui il comando 1).
+
+1) net show configuration (cosi vedi la configurazione corrente)
+
+2)net del all (elimina la configurazione corrente)
+
+3)net commit (per storare i cambiamenti, ogni volta che c'è un cambiamento, cioè aggiunta, rimozione o modifica va eseguito questo comando!!!)
+
+4)net pending, vedi tutto quello che hai modificato PRIMA di fare il commit
+
+5) per aggiungere una interfaccia logica, cioè le swp, digitare sudo nano /etc/network/interfaces
+
+
+
+VM CUMULUS
+username: cumulus
+pw: CumulusLinux!

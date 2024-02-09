@@ -1,0 +1,132 @@
+
+S1
+#spines - ip addresses
+net add interface swp1 ip add 3.1.1.1/30
+net add interface swp2 ip add 3.1.2.1/30
+net add loopback lo ip add 4.4.4.4/32
+
+#OSPF
+net add ospf router-id  4.4.4.4
+net add ospf network 0.0.0.0/0 area 0
+
+#MP-eBGP
+net add bgp autonomous-system 65000
+net add bgp router-id 4.4.4.4
+net add bgp neighbor swp1 remote-as external
+net add bgp neighbor swp2 remote-as external
+net add bgp evpn neighbor swp1 activate
+net add bgp evpn neighbor swp2 activate
+
+
+S2
+#spines - ip addresses
+net add interface swp1 ip add 3.2.1.1/30
+net add interface swp2 ip add 3.2.2.1/30
+net add loopback lo ip add 3.3.3.3/32
+
+#OSPF
+net add ospf router-id  3.3.3.3
+net add ospf network 0.0.0.0/0 area 0
+
+#MP-eBGP
+net add bgp autonomous-system 65000
+net add bgp router-id 3.3.3.3
+net add bgp neighbor swp1 remote-as external
+net add bgp neighbor swp2 remote-as external
+net add bgp evpn neighbor swp1 activate
+net add bgp evpn neighbor swp2 activate
+
+
+
+L1
+#leaves - bridge (access 10 è il tenant A)
+net add bridge bridge ports swp3,swp4
+net add interface swp3 bridge access 10
+net add interface swp4 bridge access 20
+
+#leaves - ip address
+net add interface swp1 ip add 3.1.1.2/30
+net add interface swp2 ip add 3.2.1.2/30
+net add loopback lo ip add 1.1.1.1/32
+
+#OSPF
+net add ospf router-id 1.1.1.1
+net add ospf network 3.1.1.0/30 area 0
+net add ospf network 3.2.1.0/30 area 0
+net add ospf network 1.1.1.1/32 area 0
+net add ospf passive-interface swp3,swp4
+
+#VXLAN
+net add vxlan vni100 vxlan id 100
+net add vxlan vni100 vxlan local-tunnelip 1.1.1.1
+net add vxlan vni100 bridge access 10
+net add vxlan vni200 vxlan id 200
+net add vxlan vni200 vxlan local-tunnelip 1.1.1.1
+net add vxlan vni200 bridge access 20
+
+#MP-eBGP
+net add bgp autonomous-system 65001
+net add bgp router-id 1.1.1.1
+net add bgp neighbor swp1 remote-as 65000
+net add bgp neighbor swp2 remote-as 65000
+net add bgp evpn neighbor swp1 activate
+net add bgp evpn neighbor swp2 activate
+net add bgp evpn advertise-all-vni
+
+
+
+
+L2
+#leaves - bridge
+net add bridge bridge ports swp3,swp4
+net add interface swp3 bridge access 10
+net add interface swp4 bridge access 20
+
+#leaves - ip address
+net add interface swp1 ip add 3.2.2.2/30
+net add interface swp2 ip add 3.1.2.2/30
+net add loopback lo ip add 2.2.2.2/32
+
+#OSPF
+net add ospf router-id 2.2.2.2
+net add ospf network 3.1.2.0/30 area 0
+net add ospf network 3.2.2.0/30 area 0
+net add ospf network 2.2.2.2/32 area 0
+net add ospf passive-interface swp3,swp4
+
+#VXLAN
+net add vxlan vni100 vxlan id 100
+net add vxlan vni100 vxlan local-tunnelip 2.2.2.2
+net add vxlan vni100 bridge access 10
+net add vxlan vni200 vxlan id 200
+net add vxlan vni200 vxlan local-tunnelip 2.2.2.2
+net add vxlan vni200 bridge access 20
+
+#MP-eBGP
+net add bgp autonomous-system 65002
+net add bgp router-id 2.2.2.2
+net add bgp neighbor swp1 remote-as 65000
+net add bgp neighbor swp2 remote-as 65000
+net add bgp evpn neighbor swp1 activate
+net add bgp evpn neighbor swp2 activate
+net add bgp evpn advertise-all-vni
+
+
+VM-A1
+
+ip addr add 3.12.0.1/24 dev eth0
+ip route add default via 3.12.0.254  
+
+
+VM-A2
+ip addr add 3.13.0.1/24 dev eth0
+ip route add default via 3.13.0.254 
+
+
+VM-B1
+ip addr add 3.12.1.1/24 dev eth0
+ip route add default via 3.12.1.254  
+
+VM-B2
+ip addr add 3.13.1.1/24 dev eth0
+ip route add default via 3.13.1.254 

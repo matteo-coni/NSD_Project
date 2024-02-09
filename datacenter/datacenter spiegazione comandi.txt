@@ -1,0 +1,11 @@
+Nel contesto delle VLAN e dell'architettura leaf-spine, questi comandi sono utilizzati per configurare un bridge su una leaf switch e assegnare porte fisiche a VLAN specifiche. Ecco una spiegazione dettagliata:
+
+1. `net add bridge bridge ports swp3,swp4`: Questo comando configura un bridge sulla leaf switch e specifica quali porte fisiche devono far parte del bridge. In questo caso, le porte swp3 e swp4 sono assegnate al bridge, il che significa che saranno parte del dominio di broadcast dello stesso bridge.
+
+2. `net add interface swp3 bridge access 10`: Questo comando assegna la porta fisica swp3 al VLAN di accesso con identificatore 10. In una configurazione di VLAN di accesso, ogni porta di un bridge è associata a una singola VLAN. Quindi, tutti i pacchetti ricevuti sulla porta swp3 verranno contrassegnati come appartenenti alla VLAN 10.
+
+3. `net add interface swp4 bridge access 20`: Questo comando assegna la porta fisica swp4 al VLAN di accesso con identificatore 20. Analogamente al comando precedente, tutti i pacchetti ricevuti sulla porta swp4 verranno contrassegnati come appartenenti alla VLAN 20.
+
+In sintesi, questi comandi configurano un bridge sulla leaf switch e assegnano le porte fisiche swp3 e swp4 a VLAN specifiche (rispettivamente VLAN 10 e VLAN 20) all'interno di questo bridge. Questo è utile per suddividere il traffico di rete in VLAN separate e controllare il flusso dei pacchetti all'interno dell'infrastruttura di rete leaf-spine.
+
+
