@@ -73,6 +73,9 @@ net add bgp evpn neighbor swp1 activate
 net add bgp evpn neighbor swp2 activate
 net add bgp evpn advertise-all-vni
 
+#ip address in vteps
+net add vlan 10 ip address 3.12.0.254/24
+net add vlan 20 ip address 3.12.1.254/24
 
 
 
@@ -111,6 +114,10 @@ net add bgp evpn neighbor swp1 activate
 net add bgp evpn neighbor swp2 activate
 net add bgp evpn advertise-all-vni
 
+#ip address in vteps
+net add vlan 10 ip address 3.12.0.254/24
+net add vlan 20 ip address 3.12.1.254/24
+
 
 VM-A1
 
@@ -119,8 +126,8 @@ ip route add default via 3.12.0.254
 
 
 VM-A2
-ip addr add 3.13.0.1/24 dev eth0
-ip route add default via 3.13.0.254 
+ip addr add 3.12.0.1/24 dev eth0
+ip route add default via 3.12.0.254  
 
 
 VM-B1
@@ -128,5 +135,5 @@ ip addr add 3.12.1.1/24 dev eth0
 ip route add default via 3.12.1.254  
 
 VM-B2
-ip addr add 3.13.1.1/24 dev eth0
-ip route add default via 3.13.1.254 
+ip addr add 3.12.1.1/24 dev eth0
+ip route add default via 3.12.1.254   
