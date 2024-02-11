@@ -1,4 +1,5 @@
 
+
 S1
 #spines - ip addresses
 net add interface swp1 ip add 3.1.4.1/30
@@ -124,22 +125,17 @@ net add vlan 20 ip address 3.12.1.254/24
 
 
 VM-A1
-ip addr add 3.12.0.1/24 dev enp0s3
-ip route add default via 3.12.0.254  
+ip addr add 3.12.0.1/24 dev eth0
 
 
 VM-A2
-ip link add link enp0s3 name enp0s3.10 type vlan id 10
-ip addr add 3.12.0.2/24 dev enp0s3.10
-ip link set enp0s3 up
-ip link set enp0s3.10 up
-ip route add default via 3.12.0.254
+ip addr add 3.12.0.2/24 dev eth0
 
 
 VM-B1
-ip addr add 3.12.1.1/24 dev enp0s3
-ip route add default via 3.12.1.254  
+ip addr add 3.12.1.1/24 dev 
+
 
 VM-B2
-ip addr add 3.12.1.2/24 dev enp0s3
-ip route add default via 3.12.1.254   
+ip addr add 3.12.1.2/24 dev 
+  
