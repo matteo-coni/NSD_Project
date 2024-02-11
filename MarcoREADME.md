@@ -1,8 +1,12 @@
-[IMMAGINE TOPOLOGIA QUI - centrale in div html]
+<p align="center">
+  <img width="460" height="300" src="https://picsum.photos/460/300">
+</p>
 
 #### BGP
 
-Protocollo di tipo EGP....
+Protocollo EGP (Exterior Gateway Protocol) di tipo *distance vector* che si basa sulle informazioni passate dai *downstream neighbors*, ovvero le informazioni ricevute dai router vicini, per la configurazione delle tabelle di routing IP.
+
+Si riferiscono due tipologie di BGP, a seconda se viene eseguito tra sistemi autonomi od all'interno di un AS, rispettivamente eBGP ed iBGP.
 
 #### OSPF
 
@@ -102,7 +106,7 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   !
   ```
   
-  Si configura MPLS, dove per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` i seguenti parametri
+  Si configura MPLS, dove per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` dei seguenti parametri
   
   ```shell
   net.mpls.conf.lo.input = 1
@@ -110,13 +114,13 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   net.mpls.platform_labels = 100000
   ```
   
-  applicando le seguenti modifiche tramite il comando
+  per applicare le modifiche si utilizza il comando
   
   ```shell
   sysctl -p
   ```
   
-  successivamente si configura LDP (Label Distribution Protocol) sul router
+  successivamente si configura LDP (Label Distribution Protocol), protocollo utilizzato per la distribuzione dei label all'interno di una rete MPLS, sul router 
   
   ```shell
   mpls ldp
@@ -177,7 +181,7 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   !
   ```
   
-  Si configura MPLS, dove per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` i seguenti parametri
+  Si configura MPLS, dove per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` dei seguenti parametri
   
   ```shell
   net.mpls.conf.lo.input = 1
@@ -186,7 +190,7 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   net.mpls.platform_labels = 100000
   ```
   
-  applicando le seguenti modifiche tramite il comando
+  per applicare le modifiche si utilizza il comando
   
   ```shell
   sysctl -p
@@ -272,7 +276,7 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   !
   ```
   
-  Si configura MPLS, dove per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` i seguenti parametri
+  Si configura MPLS, dove per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` dei seguenti parametri
   
   ```shell
   net.mpls.conf.lo.input = 1
@@ -280,7 +284,7 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   net.mpls.platform_labels = 100000
   ```
   
-  applicando le seguenti modifiche tramite il comando
+  per applicare le modifiche si utilizza il comando
   
   ```shell
   sysctl -p
@@ -493,14 +497,68 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   
   - ##### Client-200
     
-    Si configura l'indirizzo dell'interfaccia `eth1` e della default route verso il router `R203`
+    Il client è implementato tramite una macchia virtuale contenente *Lubuntu 22.04.3*, si entra nel terminale e si configura l'indirizzo dell'interfaccia `enp0s8` e della default route verso il router `R203` con i privilegi di amministratore
     
     ```shell
-    ip addr add 192.168.200.2/24 dev eth1
-    ip route add default via 192.168.200.1
+    sudo ip addr add 192.168.200.2/24 dev enp0s8
+    sudo ip route add default via 192.168.200.1
     ```
     
-    *lorem ipsum*
+    Dopo aver effettuato le configurazioni di rete si procede con l'implementazione del MAC (Mandatory Access Control).
+    
+    ##### MAC - AppArmor
+    
+    Il modulo MAC scelto è stato AppArmor, questo segue un paradigma per cui ogni processo può avere un profilo proprio che consiste in una serie di limitazioni e capabilities. Se un processo non possiede un profilo, viene eseguito con una schema DAC tradizionale.
+    
+    AppArmor può lavorare in due modalità:
+    
+    - `enforcement`, applica rigorosamente le regole di sicurezza definite nel profilo e qualsiasi tentativo di accesso a risorse non consentite verrà bloccato.
+    
+    - `complain`, monitora le violazioni delle regole definite nel profilo, ma non blocca effettivamente l'accesso alle risorse, registrando un avviso nel log del sistema.
+    
+    Per prendere visione dei profili disponibili all'interno del sistema, si fa uso del comando
+    
+    ```shell
+    sudo apparmor_status
+    ```
+    
+    Si crea un nuovo profilo in modalità *enforcement* per il comando `ping` rendendolo utilizzabile solo con privilegi di amministratore. Per creare un nuovo profilo si crea il file `bin.ping` all'interno della directory dei profili `/etc/apparmor.d`
+    
+    ```shell
+    sudo vim /etc/apparmor.d/bin.ping
+    ```
+    
+    Dove al suo interno inseriamo
+    
+    ```shell
+    #include <tunables/global>
+    profile ping /{,usr}/bin/ping {
+      #include <abstractions/base>
+      #include <abstractions/consoles>
+      #include <abstractions/nameservice>
+    
+      capability net_raw,
+      capability setuid,
+      network inet raw,
+    
+      /{,usr}/bin/ping mixr,
+      /etc/modules.conf r,
+    
+      deny /{,usr}/bin/ping,
+    }
+    ```
+    
+    con la capability `capability sys_admin` si indica al richiesta di privilegi di amministratore, e per impostarlo in modalità enforcement utilizzo il comando
+    
+    ```shell
+    sudo aa-enforce /etc/apparmor.d/bin.ping
+    ```
+    
+    dopo aver scritto il profilo per aggiornare tutti profili di AppArmor includendo quello appena scritto, si esegue il comando
+    
+    ```shell
+    sudo aa-logprof
+    ```
 
 #### AS300
 
@@ -648,8 +706,10 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   ```shell
   ip addr add 3.0.23.2/30 dev eth2
   ip route add default via 3.0.23.1
-   
+  
   sysctl -w net.ipv4.ip_forward=1
+  
+  iptables -t nat -A POSTROUTING -o eth2 -j MASQUERADE
   ```
   
   asdsad
@@ -752,7 +812,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   
   Si procede con la configurazione del client della LAN
   
-  - #### Client-400
+  - ##### Client-400
     
     Si configura l'indirizzo dell'interfaccia `eth1` e della default route verso il router `R402`
     
@@ -763,9 +823,29 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
     
     *lorem ipsum*
 
-#### Open VPN
+#### OpenVPN
 
-PER PRIMA COSA GUARDA SE NELLA CONFIGURAZIONE DEGLI APPARTI VA IN PERSISTENZA root
+Si configura una overlay VPN di indirizzo `192.168.100.0/24`, modello hub-and-spoke e di topologia come segue
+
+<p align="center">
+  <img width="360" height="200" src="https://picsum.photos/460/300">
+</p>
+
+Per prima cosa si procede con la generazione dei certificati necessari al servizio garantendone la persistenza.
+
+Pre-requisito fondamentale è indicare, prima dell'attivzione all'interno della configurazione avanzata delle stazioni, la directory `/root` come directory da mandare in persistenza. Oltretutto essendo `Client-200` una macchina virtuale Lubuntu, bisogna procede all'installazione del servizio.
+
+- ##### Installazione di OpenVPN su Lubuntu 22.04.3
+  
+  Per installare la chiave del repository OpenVPN utilizzata dai pacchetti OpenVPN3 per Linux, aggiungere la corretta repository per l'attuale versione di Lubuntu ed installare il servizio sulla macchina, si fa uso dei seguenti comandi
+  
+  ```shell
+  sudo mkdir -p /etc/apt/keyrings && curl -fsSL https://packages.openvpn.net/packages-repo.gpg | sudo tee /etc/apt/keyrings/openvpn.asc
+  DISTRO=$(lsb_release -c | awk '{print $2}')
+  echo "deb [signed-by=/etc/apt/keyrings/openvpn.asc] https://packages.openvpn.net/openvpn3/debian $DISTRO main" | sudo tee /etc/apt/sources.list.d/openvpn-packages.list
+  sudo apt update
+  sudo apt install openvpn3
+  ```
 
 Per abilitare `easy-rsa` per la generazione automatica delle chiavi e dei certificati necessari al funzionamento della vpn, prima di tutto si procede al pull dell'ultima versione dell'immagine docker `nsdcourse/basenet:latest`, tramite il comando all'interno della shell di GNS3 VM e poi la si riavvia
 
@@ -773,7 +853,7 @@ Per abilitare `easy-rsa` per la generazione automatica delle chiavi e dei certif
 docker pull nsdcourse/basenet
 ```
 
-per inizializzare PKI e fare la build della Certification Authority chiamata `OVPN_NSD_CA`, si eseguono i seguenti comandi all'internod della directory `/usr/share/easy-rsa` del server `GW300`
+per inizializzare PKI e fare la build della Certification Authority chiamata `OVPN_NSD_CA`, si eseguono i seguenti comandi all'interno della directory `/usr/share/easy-rsa` del server `GW300`
 
 ```shell
 ./easyrsa init-pki
@@ -796,7 +876,7 @@ e facciamo la stessa cosa per i client che sono due: `Client-200` e `R402`
 e poi si generano i parametri di Diffie Hellman per il server ( ricerca di un numero primo con determinate caratteristiche )
 
 ```shell
- ./easyrsa gen-dh
+./easyrsa gen-dh
 ```
 
 per garantire la persistenza dei certifiati generati per il server ed i client
@@ -819,7 +899,7 @@ cp pki/issued/R402.crt /root/CA/R402/
 cp pki/private/R402.key /root/CA/R402/
 ```
 
-ora dobbiamo distribuire il materiale su gli altri client quindi si entra nella shell del client `Client-200` e del client `R402` all'interno di `/root` così da mandarlo in persistenza
+ora dobbiamo distribuire il materiale su gli altri client quindi si entra nella shell del client `R402` all'interno di `/root` e parallelamente all'interno di `/Scrivania` di `Client-200`, così da mandarli in persistenza
 
 ```shell
 mkdir ovpn
@@ -827,7 +907,7 @@ cd ovpn
 vim ca.crt
 ```
 
-e dentro si incolla il contenuto salvato nel server e cioè la chiave relativa, poi faccio la stessa cosa con i cetificati ognuno per il proprio client ( nei file cetificato.crt prendo solo la chiave finale )
+e dentro si incolla il contenuto salvato nel server e cioè il certificato corrispondente, poi faccio la stessa cosa con i cetificati e le chiavi ognuno per il proprio client, dove nei file <nome_client>.crt copio solo la chiave finale
 
 ```shell
 #in Client-200
@@ -842,12 +922,123 @@ vim R402.key
 per visualizzare a video il contenuto di una chiava o di un certificato, utilizzo il comando
 
 ```shell
-cat <nome_nodo>.key
-cat <nome_nodo>.crt
+cat <nome_stazione>.crt
+cat <nome_stazione>.key
 ```
 
-Dopo aver mandato i certificati in persistenza si procede con la configurazione di rete.
+Dopo aver generato e mandato in persistenza i certificati si procede con la configurazione del server e dei client del servizio OVPN.
 
-- in `R201``
+- nel `server GW300` si copia all'interno della directory `/CA/GW300` il certificato `ca`, tramite il comando
   
-  comandi qui
+  ```shell
+  cp ./ca.crt ./GW300
+  ```
+  
+  ci si sposta all'interno della directory `/CA/GW300` e si crea il file di configurazione per il server denominato `GW300.ovpn`
+  
+  ```shell
+  port 1194
+  proto udp
+  dev tun
+  ca ca.crt
+  cert GW300.crt
+  key GW300.key
+  dh dh.pem
+  server 192.168.100.0 255.255.255.0
+  push "route 192.168.200.2 255.255.255.255"
+  push "route 192.168.40.0 255.255.255.0"
+  route 192.168.200.2 255.255.255.255
+  route 192.168.40.0 255.255.255.0
+  client-config-dir ccd
+  client-to-client
+  keepalive 10 120
+  cipher AES-256-GCMer AES-256-GCM
+  ```
+  
+  successivamente dopo aver salvata la configurazione, si crea una nuova directory chiamata `ccd` (Client Configuration Directory), tramite il comando
+  
+  ```shell
+  mkdir ccd
+  ```
+  
+  dove al suo interno si inseriscono le informazioni aggiuntive di configurazione dei client nella topologia overlay ( un file per client del tipo <nome_client> senza estensione )
+  
+  Per il client `Client-200` si crea il file di configurazione per impostargli staticamente l'indirizzo IP riferito alla topologia overlay e si indica come dietro il client OpenVPN ci sia l'host indicato, inserendo al suo interno
+  
+  ```shell
+  ifconfig-push 192.168.100.101 192.168.100.102
+  iroute 192.168.200.2 255.255.255.255
+  ```
+  
+  Per il client `R402` si crea il file di configurazione e si fa la medesima assegnazione con i corrispettivi indirizzi
+  
+  ```shell
+  ifconfig-push 192.168.100.105 192.168.100.106
+  iroute 192.168.40.0 255.255.255.0
+  ```
+  
+  Una volta terminata la configurazione del server OVPN, si avvia il servizio tramite il comando
+  
+  ```shell
+  openvpn GW300.ovpn &
+  ```
+  
+  dove `&` indica l'esecuzione in background.
+
+- nel `client Client-200`, all'interno della directory `/ovpn` creata precedentemente, si crea il file di configurazione del servizio `Client-200.ovpn`
+  
+  ```shell
+  client
+  dev tun
+  proto udp
+  remote 3.0.23.2 1194
+  resolv-retry infinite
+  ca ca.crt
+  cert Client-200.crt
+  key Client-200.key
+  remote-cert-tls server
+  cipher AES-256-GCM
+  ```
+  
+  dopo averlo salvato si utilizza il seguente comando
+  
+  ```shell
+  openvpn3 config-import --config /home/<nome_utente>/Desktop/ovpn/Client-200.ovpn --name Client-200 --persistent
+  ```
+  
+  Questa operazione prende il file di configurazione salvato e lo importa nel Configuration Manager, memorizzandolo con il nome `Client-200`. Il flag `--persistent` assicura che il file di configurazione venga conservato al riavvio del sistema. 
+  
+  Successivamente si concede all'utente root l'accesso al profilo di configurazione `Client-200` importato, tramite il comando
+  
+  ```shell
+  openvpn3 config-acl --show --lock-down true --grant root --config Client-200
+  ```
+  
+  Dopo aver mandato in persistenza il file di configurazione si avvia il servizio nell'immediato ( tramite l'argomento `--now`) e si imposta il suo avvio automatico ad ogni accensione della macchina virtuale
+  
+  ```shell
+  sudo systemctl enable --now openvpn3-session@Client-200.service
+  ```
+
+- nel `client R402`, all'interno della directory `/ovpn` creata precedentemente, si crea il file di configurazione del servizio `R402.ovpn`
+  
+  ```shell
+  client
+  dev tun
+  proto udp
+  remote 3.0.23.2 1194
+  resolv-retry infinite
+  ca ca.crt
+  cert R402.crt
+  key R402.key
+  remote-cert-tls server
+  cipher AES-256-GCM
+  ```
+  
+  dopo averlo salvato si avvia il servizio in background tramite il comando
+  
+  ```shell
+  openvpn R402.ovpn &
+  ```
+
+sdadad
