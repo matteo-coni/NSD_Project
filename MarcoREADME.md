@@ -453,7 +453,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   ip route add default via 2.0.23.1
   ```
   
-  Si abilita il forwarding degli indirizzi IP e si definiscono le variabili di ambiente `LAN` e `NET` per utilizzare nomi simbolici più comprensibili per le interfacce di rete del router, dove rispettivamente indicato l'interfaccia relativa alla rete `LAN` verso `Client-200` e l'interfaccia verso l'interno di `AS200`
+  Si abilita il forwarding degli indirizzi IP e si definiscono le variabili di ambiente `LAN` e `NET` per utilizzare nomi simbolici più comprensibili per le interfacce di rete, dove rispettivamente indichiuamo l'interfaccia relativa alla rete `LAN` verso `Client-200` e l'interfaccia verso l'interno di `AS200`.
   
   ```
   sysctl -w net.ipv4.ip_forward=1
@@ -461,7 +461,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   export NET=eth0     
   ```
   
-  Successivamente si configurano le regole del firewall `iptables`:
+  Successivamente si configurano le regole del firewall attraverso `iptables`:
   
   - `REGOLA-1`: consente il forwarding del traffico in uscita dalla LAN verso l'`AS200`
     
@@ -475,9 +475,9 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
     iptables -A FORWARD -m state --state ESTABLISHED -j ACCEPT
     ```
   
-  - `REGOLA-3`: forse da mettere una terza per il ritorno da rifiutare ??
+  - `REGOLA-3`: forse da mettere le regole  NAT per openVPN ??????
   
-  Dopo aver configurato il firewall si configura il NAT (Network Address Translation), in modo tale da modificare l'indirizzo IP sorgente dei pacchetti inviati dalla LAN da `Client-200` con quello dell'interfaccia `NET` quindi quella di `AS200`, tramite il comando
+  Dopo aver configurato il firewall si configura il NAT (Network Address Translation), in modo tale da modificare l'indirizzo IP sorgente dei pacchetti inviati dalla LAN da `Client-200` con quello dell'interfaccia `NET` di `R203`, tramite il comando
   
   ```shell
   iptables -t nat -A POSTROUTING -o $NET -j MASQUERADE
@@ -617,23 +617,17 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   
   ```shell
   router bgp 300
-   neighbor 3.0.23.2 remote-as 300
-   neighbor 3.0.23.2 update-source 3.255.0.1
    neighbor 3.255.0.2 remote-as 300
    neighbor 3.255.0.2 update-source 3.255.0.1
    neighbor 10.0.33.1 remote-as 100
    !
    address-family ipv4 unicast
-    network 3.0.0.0/8
     network 3.1.0.0/16
-    neighbor 3.0.23.2 next-hop-self
     neighbor 3.255.0.2 next-hop-self
    exit-address-family
   exit
   !
   ```
-  
-  *lorem ipsum*
 
 - ##### R302
   
@@ -649,11 +643,11 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   exit
   !
   interface eth2
-   ip address 3.0.23.1/30
+   ip address 3.2.23.1/30
   exit
   !
   interface lo
-   ip address 3.2.0.1/8
+   ip address 3.2.0.1/16
    ip address 3.255.0.2/32
   exit
   !
@@ -665,7 +659,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   router ospf
    ospf router-id 3.255.0.2
    network 3.0.0.0/8 area 0
-   network 3.0.23.0/30 area 0
+   network 3.2.23.0/30 area 0
    network 3.2.0.0/16 area 0
    network 3.255.0.2/32 area 0
    network 10.0.34.0/30 area 0
@@ -677,14 +671,13 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   
   ```shell
   router bgp 300
-   neighbor 3.0.23.2 remote-as 300
-   neighbor 3.0.23.2 update-source 3.2.0.1
+   neighbor 3.2.23.2 remote-as 300
+   neighbor 3.2.23.2 update-source 3.2.0.1
    neighbor 3.255.0.1 remote-as 300
    neighbor 3.255.0.1 update-source 3.255.0.2
    neighbor 10.0.44.2 remote-as 400
    !
    address-family ipv4 unicast
-    network 3.0.0.0/8
     network 3.2.0.0/16
     neighbor 3.0.23.2 next-hop-self
     neighbor 3.255.0.1 next-hop-self
@@ -693,20 +686,38 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   !
   ```
   
-  *lorem ipsum*
 
 - ##### GW300
   
-  Si procede con la configurazione dell'interfaccia `eth2`, della default route verso `R302` con la conseguente abilitazione per il forwarding degli indirizzi IP
+  Si procede con la configurazione dell'interfaccia `eth2` e della default route verso `R302` con la conseguente abilitazione per il forwarding degli indirizzi IP
   
   ```shell
-  ip addr add 3.0.23.2/30 dev eth2
-  ip route add default via 3.0.23.1
-  
+  ip addr add 3.2.23.2/24 dev eth2
+  ip route add default via 3.2.23.1
   sysctl -w net.ipv4.ip_forward=1
-  
-  iptables -t nat -A POSTROUTING -o eth2 -j MASQUERADE
   ```
+Successivamente si associano le vlan con id 100 e 200 rispettivamente alle interfacce virtuali eth0.100 e eth0.200 per consentire la connettività da e verso l'esterno del datacenter sottostante. Si aggiunge poi l'indirizzo del gateway associato alle due interfacce virtuali. Infine si aggiungono due rotte verso la foglia L1 per raggiungere separatamente i due tenant.
+  
+```shell
+  ip link add link eth0 name eth0.100 type vlan id 100
+  ip link add link eth0 name eth0.200 type vlan id 200
+
+  ip addr add 3.10.10.1/16 dev eth0.100
+  ip addr add 3.10.10.1/16 dev eth0.200
+
+  ip link set eth0.100 up
+  ip link set eth0.200 up
+
+  ip route add 3.12.0.0/24 via 3.10.10.254 dev eth0.100
+  ip route add 3.12.1.0/24 via 3.10.10.254 dev eth0.200
+```
+Per concludere si abilita il NAT verso l'interfaccia eth2 (AS300) e vengono bloccati i pacchetti verso l'eth0.200 provenienti dall'eth0.100, per evitare la comunicazione tra i due tenant a causa del gateway in comune.
+
+```shell
+  iptables -t nat -A POSTROUTING -o eth2 -j MASQUERADE
+
+  iptables -A FORWARD -i eth0.100 -o eth0.200 -j DROP
+```
   
   asdsad
   
@@ -736,7 +747,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
 > 
 > `Client-400` is a simple LAN device with a default route through `R402`.
 
-Di seguito si procede con la configurazione delle singole stazioni all'interno dell'Autonomous System
+Di seguito è specificata la configurazione delle singole stazioni all'interno dell'Autonomous System 400
 
 - ##### R401
   
@@ -784,8 +795,6 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   exit
   !
   ```
-  
-  *lorem ipsum*
 
 - ##### R402
   
@@ -797,13 +806,13 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   ip route add default via 4.0.12.2
   ```
   
-  Successivamente si abilita il forwarding degli indirizzi ip e si configura il nome simbolico `NET`ed il NAT per il `Client-400` all'interno della LAN collegata
+  Successivamente si abilita il forwarding degli indirizzi ip e si configura il nome simbolico `NET` ed il NAT per il `Client-400` all'interno della LAN collegata
   
   ```shell
   sysctl -w net.ipv4.ip_forward=1 
   
   export NET=eth0
-  iptables -t nat -A POSTROUTING -o $NET -j MASQUERADE #abilita il NAT
+  iptables -t nat -A POSTROUTING -o $NET -j MASQUERADE
   ```
   
   Si procede con la configurazione del client della LAN
@@ -817,7 +826,6 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
     ip route add default via 192.168.40.1
     ```
     
-    *lorem ipsum*
 
 #### OpenVPN
 
@@ -862,7 +870,7 @@ si genera poi il certificato del server
 ./easyrsa build-server-full GW300 nopass
 ```
 
-e facciamo la stessa cosa per i client che sono due: `Client-200` e `R402`
+e si esegue la stesso comando per i client: `Client-200` e `R402`
 
 ```shell
 ./easyrsa build-client-full Client-200 nopass
@@ -875,7 +883,7 @@ e poi si generano i parametri di Diffie Hellman per il server ( ricerca di un nu
 ./easyrsa gen-dh
 ```
 
-per garantire la persistenza dei certifiati generati per il server ed i client
+per garantire la persistenza dei certifiati generati per il server ed i client si eseguono poi i seguenti comandi:
 
 ```shell
 mkdir /root/CA
@@ -895,7 +903,7 @@ cp pki/issued/R402.crt /root/CA/R402/
 cp pki/private/R402.key /root/CA/R402/
 ```
 
-ora dobbiamo distribuire il materiale su gli altri client quindi si entra nella shell del client `R402` all'interno di `/root` e parallelamente all'interno di `/Scrivania` di `Client-200`, così da mandarli in persistenza
+mentre per  distribuire il materiale su gli altri client si entra nella shell del client `R402` all'interno di `/root` e parallelamente all'interno di `/Scrivania` di `Client-200`, così da mandarli in persistenza
 
 ```shell
 mkdir ovpn
@@ -903,7 +911,7 @@ cd ovpn
 vim ca.crt
 ```
 
-e dentro si incolla il contenuto salvato nel server e cioè il certificato corrispondente, poi faccio la stessa cosa con i cetificati e le chiavi ognuno per il proprio client, dove nei file <nome_client>.crt copio solo la chiave finale
+e dentro si incolla il contenuto salvato nel server e cioè il certificato corrispondente. Poi eseguo lo stesso con i cetificati e le chiavi ognuno per il proprio client, dove nei file <nome_client>.crt copio solo la chiave finale
 
 ```shell
 #in Client-200
