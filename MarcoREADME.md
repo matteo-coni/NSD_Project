@@ -5,7 +5,7 @@
 ## Table of contents
 
 1. [AS100](#AS100)
-    1. [MPLS - Initialization](#MPLS)
+    1. [MPLS - Initialization](#MPLS-Initialization)
         
 
 
@@ -36,7 +36,7 @@ Per garantire che il routing all'interno dell'AS avvenga in modo ordinato, evita
 
 MPLS è un protocollo per la distribuzione delle rotte la quale idea chiave è quella di associare un identificatore, chiamato *label*, ad ogni pacchetto per semplificare il loro routing e migliorare l'efficienza del loro trasporto attraverso la rete.
 
-##### MPLS - Initialization
+##### MPLS-Initialization
 
 Per aggiungere il supporto al protocollo MPLS in maniera persistente, è necessario seguire i passi sotto descritti:
 
