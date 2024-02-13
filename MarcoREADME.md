@@ -10,7 +10,8 @@ Si riferiscono due tipologie di BGP, a seconda se viene eseguito tra sistemi aut
 
 #### OSPF
 
-Spiegazione OSPF ed il perche lo abbiamo usato
+Il protocollo OSPF (Open Shortest Path First) è un protocollo gateway interno utilizzato per distribuire le informazioni di routing in un sistema autonomo. A differenza di protocolli di routing tradizionali come RIP, si basa sulla tecnologia "Link State".
+Esso usa l'IP multicast per inviare gli aggiornamenti degli stati del collegamento (link state): ciò garantisce un minor consumo delle risorse di elaborazione sui router che non sono in ascolto dei pacchetti OSPF; gli aggiornamenti non sono inviati a intervalli fissi, ma solo nel caso in cui siano state apportate modifiche al routing. Inoltre consente un migliore bilanciamento del carico e consente una definizione logica delle reti in cui i router possono essere suddivisi in aree.
 
 #### AS100
 
@@ -24,32 +25,34 @@ Spiegazione OSPF ed il perche lo abbiamo usato
 > 
 > - Configure LDP/MPLS in the core network
 
-Per garantire che il routing all'interno dell'AS avvenga in modo ordinato, evitando loop di routing e mantenendo la coerenza della tabella di routing una rotta appresa tramite iBGP non viene mai propagata ad altri peer iBGP non adiacenti. In particolar modo essendo la topologia dell'`AS200` *non full mesh di sessioni iBGP ed essendo sprovvista di BGP Route Reflector*, si utilizza il protocollo MPLS.
+Per garantire che il routing all'interno dell'AS avvenga in modo ordinato, evitando loop di routing e mantenendo la coerenza della tabella di routing una rotta appresa tramite iBGP non viene mai propagata ad altri peer iBGP non adiacenti. In particolar modo essendo la topologia dell'`AS200` *non full mesh di sessioni iBGP* ed essendo *sprovvista di BGP Route Reflector*, si utilizza il protocollo MPLS con LDP.
 
 MPLS è un protocollo per la distribuzione delle rotte la quale idea chiave è quella di associare un identificatore, chiamato *label*, ad ogni pacchetto per semplificare il loro routing e migliorare l'efficienza del loro trasporto attraverso la rete.
 
 ##### MPLS - Initialization
 
-Per aggiungere il supporto al protocollo MPLS in maniera persistente, bisogna aggiungere le seguenti righe tramite la shell di GNS3 VM nel file `/etc/modules`, con il comando
+Per aggiungere il supporto al protocollo MPLS in maniera persistente, è necessario seguire i passi sotto descritti:
 
-```shell
-nano /etc/modules
-```
+1. Aprire la shell all'interno della macchina virtuale GNS3 VM
+2. Aprire il file `/etc/modules` con:
 
-inserendo le righe
+  ```shell
+  nano /etc/modules
+  ```
+3. Inserire le seguenti righe:
 
-```bash
-mpls-router
-mpls-iptunnel
-```
+  ```bash
+  mpls-router
+  mpls-iptunnel
+  ```
 
-poi si riavvia e si può controllare la coretta installazione con il comando
+E' possibile poi riavviare e controllare la coretta installazione con il comando
 
 ```shell
 show mpls status
 ```
 
-che se installati correttamente mostra il messaggio `MPLS support enabled: yes`
+Se viene mostrato il messaggio `MPLS support enabled: yes`, il processo è andato a buon fine.
 
 Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con la configurazione delle singole stazioni all'interno dell'Autonomous System
 
@@ -106,7 +109,7 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   !
   ```
   
-  Si configura MPLS, dove per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` dei seguenti parametri
+  Si configura ora MPLS: dove per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` dei seguenti parametri
   
   ```shell
   net.mpls.conf.lo.input = 1
@@ -181,7 +184,7 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   !
   ```
   
-  Si configura MPLS, dove per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` dei seguenti parametri
+  Si configura MPLS: per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` dei seguenti parametri
   
   ```shell
   net.mpls.conf.lo.input = 1
@@ -221,7 +224,6 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   !
   ```
   
-  *lorem ipsum*
 
 - ##### R103
   
@@ -276,7 +278,7 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   !
   ```
   
-  Si configura MPLS, dove per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` dei seguenti parametri
+  Si configura MPLS: per prima cosa si abilitano le interfacce che possono accettare i pacchetti MPLS e si impostano il numero di label che possono essere usate, tramite l'aggiunta al file `/etc/sysctl.conf` dei seguenti parametri
   
   ```shell
   net.mpls.conf.lo.input = 1
@@ -311,8 +313,6 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   exit
   !
   ```
-  
-  *lorem ipsum*
 
 #### AS200
 
@@ -389,8 +389,6 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   exit
   !
   ```
-  
-  *lorem ipsum*
 
 - ##### R202
   
@@ -444,14 +442,6 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
       exit
       !
   ```
-  
-  Forse prova potrebbe funziona anche senza ??
-  
-  ```shell
-  sysctl -w net.ipv4.ip_forward=1
-  ```
-  
-  *lorem ipsum*
 
 - ##### R203
   
@@ -508,7 +498,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
     
     ##### MAC - AppArmor
     
-    Il modulo MAC scelto è stato AppArmor, questo segue un paradigma per cui ogni processo può avere un profilo proprio che consiste in una serie di limitazioni e capabilities. Se un processo non possiede un profilo, viene eseguito con una schema DAC tradizionale.
+    Il modulo MAC scelto è stato AppArmor: questo segue un paradigma per cui ogni processo può avere un profilo proprio che consiste in una serie di limitazioni e capabilities. Se un processo non possiede un profilo, viene eseguito con una schema DAC tradizionale.
     
     AppArmor può lavorare in due modalità:
     
@@ -522,7 +512,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
     sudo apparmor_status
     ```
     
-    Si crea un nuovo profilo in modalità *enforcement* per il comando `ping` rendendolo utilizzabile solo con privilegi di amministratore. Per creare un nuovo profilo si crea il file `bin.ping` all'interno della directory dei profili `/etc/apparmor.d`
+    Si crea un nuovo profilo in modalità *enforcement* per il comando `ping` rendendolo inutilizzabile anche avendo privilegi di amministratore (es. utente root). Per creare un nuovo profilo si crea il file `bin.ping` all'interno della directory dei profili `/etc/apparmor.d`
     
     ```shell
     sudo vim /etc/apparmor.d/bin.ping
@@ -536,25 +526,31 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
       #include <abstractions/base>
       #include <abstractions/consoles>
       #include <abstractions/nameservice>
-    
-      capability net_raw,
+
+      **deny** capability net_raw,
       capability setuid,
       network inet raw,
-    
+      network inet6 raw,
+
       /{,usr}/bin/ping mixr,
       /etc/modules.conf r,
-    
-      deny /{,usr}/bin/ping,
+
     }
     ```
     
-    con la capability `capability sys_admin` si indica al richiesta di privilegi di amministratore, e per impostarlo in modalità enforcement utilizzo il comando
+    La capability `net_raw` è presente di default in molti sistemi e permette, oltre alla generazione di traffico ICMP verso altre macchine, di creare nuovi "raw packet". Nelle mani di un utente malintenzionato NET_RAW può abilitare un'ampia varietà di exploit di rete dall'interno della macchina e dal relativo cluster. Per questo è stato generato il profilo appena descritto.
+
+    Per impostarlo in modalità enforcement si utilizza il comando
     
     ```shell
     sudo aa-enforce /etc/apparmor.d/bin.ping
     ```
+    mentre con il seguente comando si ricarica il profilo in caso di modifiche:
     
-    dopo aver scritto il profilo per aggiornare tutti profili di AppArmor includendo quello appena scritto, si esegue il comando
+    ```shell
+    sudo apparmor_parser -r /etc/apparmor.d/bin.ping
+    ```
+    Dopo aver scritto il profilo, per aggiornare tutti profili di AppArmor includendo quello appena scritto, si esegue il comando
     
     ```shell
     sudo aa-logprof
