@@ -796,7 +796,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   <img width=90% src="images/DC_image.png">
 </p>
 
-Questa sezione illustra l'implementazione di una topologia a due livelli leaf-spine Clos all'interno del data center di AS 200. All'interno della rete cloud, ci sono due tenant (A e B), ciascuno ospita due macchine virtuali collegate a leaf1 e leaf2. A ciascun tenant viene assegnato un dominio di broadcast, garantendo segmentazione e isolamento distinti per i rispettivi ambienti. La configurazione è adattata per soddisfare requisiti specifici:
+Questa sezione illustra l'implementazione di una topologia a due livelli leaf-spine Clos all'interno del data center di AS 300. All'interno della rete cloud, ci sono due tenant (A e B), ciascuno ospita due macchine virtuali collegate a leaf1 e leaf2. A ciascun tenant viene assegnato un dominio di broadcast, garantendo segmentazione e isolamento distinti per i rispettivi ambienti. La configurazione è adattata per soddisfare requisiti specifici:
 
 1. Realizzare l'instradamento VXLAN/EVPN nella rete DC per fornire L2VPNs tra le macchine di un tenant.
 
