@@ -891,7 +891,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   ```
   Successivamente è stato configurato un gateway IP per le VLAN 100 e 200. Il gateway IP funge da punto di uscita per il traffico generato dai dispositivi all'interno del datacenter e destinato a reti esterne.
 
-```shell
+  ```shell
   net add vlan 100 ip gateway 3.10.10.1
   net add vlan 200 ip gateway 3.10.10.1
   ```
