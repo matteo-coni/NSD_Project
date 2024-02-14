@@ -940,6 +940,9 @@ Questa sezione illustra l'implementazione di una topologia a due livelli leaf-sp
   ip route add default via 3.2.10.254
   ```
 
+  Gli end-host del datacenter possono comunicare con la rete esterna tramite il gateway GW300 mentre dall'esterno si può raggiungere il tenant A tramite la rete OpenVPN.
+  
+
 ### AS400
 <img align="right" width=35% src="images/AS400.png">
 
