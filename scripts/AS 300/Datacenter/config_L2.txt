@@ -33,8 +33,8 @@ net add bgp evpn neighbor swp2 activate
 net add bgp evpn advertise-all-vni
 
 #ip address in vteps
-net add vlan 10 ip address 3.12.0.254/24
-net add vlan 20 ip address 3.12.1.254/24
+net add vlan 10 ip address 3.2.10.254/24
+net add vlan 20 ip address 3.2.20.254/24
 
 net add vlan 100
 net add vlan 200
