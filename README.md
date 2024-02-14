@@ -775,8 +775,8 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   ip link set eth0.100 up
   ip link set eth0.200 up
   
-  ip route add 3.12.0.0/24 via 3.10.10.254 dev eth0.100
-  ip route add 3.12.1.0/24 via 3.10.10.254 dev eth0.200
+  ip route add 3.2.10.0/24 via 3.10.10.254 dev eth0.100
+  ip route add 3.2.20.0/24 via 3.10.10.254 dev eth0.200
   ```
   
   Per concludere si abilita il NAT verso l'interfaccia eth2 (AS300) e vengono bloccati i pacchetti verso l'eth0.200 provenienti dall'eth0.100, per evitare la comunicazione tra i due tenant a causa del gateway in comune.
