@@ -733,7 +733,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
    !
    address-family ipv4 unicast
     network 3.2.0.0/16
-    neighbor 3.0.23.2 next-hop-self
+    neighbor 3.2.23.2 next-hop-self
     neighbor 3.255.0.1 next-hop-self
    exit-address-family
   exit
