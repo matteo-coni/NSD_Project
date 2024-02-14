@@ -779,103 +779,103 @@ Per concludere si abilita il NAT verso l'interfaccia eth2 (AS300) e vengono bloc
 
  - #### Leaves
    
-La configurazione delle due foglie è quasi identica, quindi ci concentreremo nel dettagliare la foglia 1, per poi descrivere i comandi aggiuntivi che le sono stati assegnati per consentire la connettività verso l'esterno del datacenter.
+  La configurazione delle due foglie è quasi identica, quindi ci concentreremo nel dettagliare la foglia 1, per poi descrivere i comandi aggiuntivi che le sono stati assegnati per consentire la connettività verso l'esterno del datacenter.
 
-Questi comandi configurano un bridge su un router Linux e assegnano specifiche porte al bridge.
+  Questi comandi configurano un bridge su un router Linux e assegnano specifiche porte al bridge.
 
-```shell
-net add bridge bridge ports swp3,swp4,swp5
-net add interface swp3 bridge access 10
-net add interface swp4 bridge access 20
-net add bridge bridge pvid 1
-net add bridge bridge vids 10,20,100,200
-```
+  ```shell
+  net add bridge bridge ports swp3,swp4,swp5
+  net add interface swp3 bridge access 10
+  net add interface swp4 bridge access 20
+  net add bridge bridge pvid 1
+  net add bridge bridge vids 10,20,100,200
+  ```
 
-Inizialmente, vengono aggiunte al bridge le porte swp3, swp4 e swp5. Successivamente, la porta swp3 viene assegnata al bridge con VLAN di accesso 10, mentre la porta swp4 viene assegnata con VLAN di accesso 20. Infine, viene impostata la VLAN predefinita del bridge.
+  Inizialmente, vengono aggiunte al bridge le porte swp3, swp4 e swp5. Successivamente, la porta swp3 viene assegnata al bridge con VLAN di accesso 10, mentre la porta swp4 viene assegnata con VLAN di accesso 20. Infine, viene impostata la VLAN predefinita del bridge.
 
-Configurazione delle interfacce di rete:
+  Configurazione delle interfacce di rete:
 
-```shell
-net add interface swp1 ip add 3.1.4.2/30
-net add interface swp2 ip add 3.2.1.2/30
-net add loopback lo ip add 3.1.1.1/32
-```
+  ```shell
+  net add interface swp1 ip add 3.1.4.2/30
+  net add interface swp2 ip add 3.2.1.2/30
+  net add loopback lo ip add 3.1.1.1/32
+  ```
 
-Configurazione OSPF:
+  Configurazione OSPF:
 
-```shell
-net add ospf router-id 3.1.1.1
-net add ospf network 3.1.4.0/30 area 0
-net add ospf network 3.2.1.0/30 area 0
-net add ospf network 3.1.1.1/32 area 0
-net add ospf passive-interface swp3,swp4
-```
+  ```shell
+  net add ospf router-id 3.1.1.1
+  net add ospf network 3.1.4.0/30 area 0
+  net add ospf network 3.2.1.0/30 area 0
+  net add ospf network 3.1.1.1/32 area 0
+  net add ospf passive-interface swp3,swp4
+  ```
 
-La leaf con l'ultimo comando non invierà attivamente i messaggi OSPF tramite tramite le interfacce swp3 e swp4 che raggiungono gli end-host della rete del datacenter.
+  La leaf con l'ultimo comando non invierà attivamente i messaggi OSPF tramite tramite le interfacce swp3 e swp4 che raggiungono gli end-host della rete del datacenter.
 
-Configurazione VXLAN/EVPN:
+  Configurazione VXLAN/EVPN:
 
-Sono configurate due interfacce VXLAN, vni10 e vni20, con ID rispettivamente 10 e 20. La procedura di configurazione abilita l'apprendimento del bridge sul dispositivo VXLAN, mappando la VLAN di accesso 10 all'interfaccia VXLAN vni10 e lo stesso per la VLAN 20. Successivamente, l'indirizzo IP del tunnel locale viene impostato per corrispondere all'indirizzo di loopback della Cumulus VM.
+  Sono configurate due interfacce VXLAN, vni10 e vni20, con ID rispettivamente 10 e 20. La procedura di configurazione abilita l'apprendimento del bridge sul dispositivo VXLAN, mappando la VLAN di accesso 10 all'interfaccia VXLAN vni10 e lo stesso per la VLAN 20. Successivamente, l'indirizzo IP del tunnel locale viene impostato per corrispondere all'indirizzo di loopback della Cumulus VM.
 
-```shell
-net add vxlan vni10 vxlan id 10
-net add vxlan vni10 vxlan local-tunnelip 3.1.1.1
-net add vxlan vni10 bridge access 10
-net add vxlan vni20 vxlan id 20
-net add vxlan vni20 vxlan local-tunnelip 3.1.1.1
-net add vxlan vni20 bridge access 20
-```
+  ```shell
+  net add vxlan vni10 vxlan id 10
+  net add vxlan vni10 vxlan local-tunnelip 3.1.1.1
+  net add vxlan vni10 bridge access 10
+  net add vxlan vni20 vxlan id 20
+  net add vxlan vni20 vxlan local-tunnelip 3.1.1.1
+  net add vxlan vni20 bridge access 20
+  ```
 
-A seguire la configurazione che permette al dispositivo di partecipare attivamente al protocollo BGP, estendendo le funzionalità per supportare EVPN ed esportando infine, tutte le vni (virtual network identifier):
+  A seguire la configurazione che permette al dispositivo di partecipare attivamente al protocollo BGP, estendendo le funzionalità per supportare EVPN ed esportando infine, tutte le vni (virtual network identifier):
 
-```shell
-net add bgp autonomous-system 65001
-net add bgp router-id 3.1.1.1
-net add bgp neighbor swp1 remote-as 65000
-net add bgp neighbor swp2 remote-as 65000
-net add bgp evpn neighbor swp1 activate
-net add bgp evpn neighbor swp2 activate
-net add bgp evpn advertise-all-vni
-```
+  ```shell
+  net add bgp autonomous-system 65001
+  net add bgp router-id 3.1.1.1
+  net add bgp neighbor swp1 remote-as 65000
+  net add bgp neighbor swp2 remote-as 65000
+  net add bgp evpn neighbor swp1 activate
+  net add bgp evpn neighbor swp2 activate
+  net add bgp evpn advertise-all-vni
+  ```
 
-Si assegnano degli indirizzi ip alle VTEP per poter partecipare attivamente al routing e all'instradamento del traffico VXLAN attraverso la rete:
+  Si assegnano degli indirizzi ip alle VTEP per poter partecipare attivamente al routing e all'instradamento del traffico VXLAN attraverso la rete:
 
-```shell
-net add vlan 10 ip address 3.2.10.254/24
-net add vlan 20 ip address 3.2.20.254/24
-```
+  ```shell
+  net add vlan 10 ip address 3.2.10.254/24
+  net add vlan 20 ip address 3.2.20.254/24
+  ```
 
-Istanziate due tabelle di routing virtuali (VRF) per consentire la connettività da e verso l'esterno dalla rete del datacenter. Ognuna di esse è associata ad un dominio di broadcast, che a loro volta separano e ne rappresentano il tenant A ed il tenant B della topologia leaf-spine.
+  Istanziate due tabelle di routing virtuali (VRF) per consentire la connettività da e verso l'esterno dalla rete del datacenter. Ognuna di esse è associata ad un dominio di broadcast, che a loro volta separano e ne rappresentano il tenant A ed il tenant B della topologia leaf-spine.
 
-```shell
-net add vlan 100 ip address 3.10.10.254/16
-net add vlan 200 ip address 3.10.10.254/16
-net add vlan 100 vrf TENA
-net add vlan 10 vrf TENA
-net add vlan 200 vrf TENB
-net add vlan 20 vrf TENB
-```
+  ```shell
+  net add vlan 100 ip address 3.10.10.254/16
+  net add vlan 200 ip address 3.10.10.254/16
+  net add vlan 100 vrf TENA
+  net add vlan 10 vrf TENA
+  net add vlan 200 vrf TENB
+  net add vlan 20 vrf TENB
+  ```
 
-Comandi aggiuntivi alla leaf 1 per pubblicizzare le rotte evpn? e dire che il leaf1 rappresenta il gateway di default per far transitare i pacchetti in entrata ed uscita dal datacenter.
+  Comandi aggiuntivi alla leaf 1 per pubblicizzare le rotte evpn? e dire che il leaf1 rappresenta il gateway di default per far transitare i pacchetti in entrata ed uscita dal datacenter.
 
-```shell
-net add bgp vrf TENA autonomous-system 65001
-net add bgp vrf TENA evpn advertise ipv4 unicast
-net add bgp vrf TENA evpn default-originate ipv4
+  ```shell
+  net add bgp vrf TENA autonomous-system 65001
+  net add bgp vrf TENA evpn advertise ipv4 unicast
+  net add bgp vrf TENA evpn default-originate ipv4
 
-net add bgp vrf TENB autonomous-system 65001
-net add bgp vrf TENB evpn advertise ipv4 unicast
-net add bgp vrf TENB evpn default-originate ipv4
-```
+  net add bgp vrf TENB autonomous-system 65001
+  net add bgp vrf TENB evpn advertise ipv4 unicast
+  net add bgp vrf TENB evpn default-originate ipv4
+  ```
 
 - #### End-host
   
-Gli end-host della topologia sono costituiti da container Linux di base, in cui si configura una route predefinita verso la rispettiva leaf e si assegna un indirizzo IP all'interfaccia di rete. Prendendo il server A1 come esempio, abbiamo:
+  Gli end-host della topologia sono costituiti da container Linux di base, in cui si configura una route predefinita verso la rispettiva leaf e si assegna un indirizzo IP all'interfaccia di rete. Prendendo il server A1 come esempio, abbiamo:
 
-```shell
-ip addr add 3.2.10.1/24 dev eth0
-ip route add default via 3.2.10.254
-```
+  ```shell
+  ip addr add 3.2.10.1/24 dev eth0
+  ip route add default via 3.2.10.254
+  ```
 
 #### AS400
 
