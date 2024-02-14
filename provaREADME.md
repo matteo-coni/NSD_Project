@@ -187,8 +187,6 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   exit
   !
   ```
-  
-  *lorem ipsum*
 
 - ##### R102
   
@@ -523,7 +521,15 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
     iptables -A FORWARD -m state --state ESTABLISHED -j ACCEPT
     ```
   
-  - `REGOLA-3`: forse da mettere le regole  NAT per openVPN ??????
+  - `REGOLA-3`: consente la ricezione, il forward e l'invio di pacchetti ICMP, utilizzati per il comando ping
+
+    ```shell
+    iptables -A INPUT -p icmp -j ACCEPT
+    iptables -A FORWARD -p icmp -j ACCEPT
+    iptables -A OUTPUT -p icmp -j ACCEPT
+    ```
+    
+  - forse da mettere le regole  NAT per openVPN ??????
   
   Dopo aver configurato il firewall si configura il NAT (Network Address Translation), in modo tale da modificare l'indirizzo IP sorgente dei pacchetti inviati dalla LAN da `Client-200` con quello dell'interfaccia `NET` di `R203`, tramite il comando
   
