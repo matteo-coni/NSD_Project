@@ -789,8 +789,6 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   
   ```shell
   iptables -t nat -A POSTROUTING -o eth2 -j MASQUERADE
-  
-  iptables -A FORWARD -i eth0.100 -o eth0.200 -j DROP
   ```
 
 ### Datacenter
@@ -1237,7 +1235,7 @@ Dopo aver generato e mandato in persistenza i certificati si procede con la conf
   Successivamente si concede all'utente root l'accesso al profilo di configurazione `Client-200` importato, tramite il comando
   
   ```shell
-  openvpn3 config-acl --show --lock-down true --grant root --config Client-200 --transfer-owner-session true
+  openvpn3 config-acl --show --lock-down true --grant root --config Client-200
   ```
   
   Dopo aver mandato in persistenza il file di configurazione si avvia il servizio nell'immediato ( tramite l'argomento `--now`) e si imposta il suo avvio automatico ad ogni accensione della macchina virtuale
