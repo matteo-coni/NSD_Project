@@ -8,13 +8,13 @@ __Autori__
 * :man_technologist: Marco Purificato (matricola 0350312)
 * :man_technologist: Roberto Fardella (matricola 0334186)
 
-#### Topology
+### Topology
 
 <p align="center">
-  <img width="460" height="300" src="https://picsum.photos/460/300">
+  <img width=90% src="images/topology.png">
 </p>
 
-#### Table of contents
+### Table of contents
 
 1. [AS100](#AS100)
    
@@ -58,18 +58,19 @@ __Autori__
        
        1. [Installazione del servizio](#Installazione_di_OpenVPN_su_Lubuntu_22.04.3)
 
-#### BGP
+### BGP
 
 Protocollo EGP (Exterior Gateway Protocol) di tipo *distance vector* che si basa sulle informazioni passate dai *downstream neighbors*, ovvero le informazioni ricevute dai router vicini, per la configurazione delle tabelle di routing IP.
 
 Si riferiscono due tipologie di BGP, a seconda se viene eseguito tra sistemi autonomi od all'interno di un AS, rispettivamente eBGP ed iBGP.
 
-#### OSPF
+### OSPF
 
 Il protocollo OSPF (Open Shortest Path First) è un protocollo gateway interno utilizzato per distribuire le informazioni di routing in un sistema autonomo. A differenza di protocolli di routing tradizionali come RIP, si basa sulla tecnologia "Link State".
 Esso usa l'IP multicast per inviare gli aggiornamenti degli stati del collegamento (link state): ciò garantisce un minor consumo delle risorse di elaborazione sui router che non sono in ascolto dei pacchetti OSPF; gli aggiornamenti non sono inviati a intervalli fissi, ma solo nel caso in cui siano state apportate modifiche al routing. Inoltre consente un migliore bilanciamento del carico e consente una definizione logica delle reti in cui i router possono essere suddivisi in aree.
 
-#### AS100
+### AS100
+<img align="right" width=35% src="images/AS100.png">
 
 > `AS100` is a transit Autonomous System providing network access to two customers: `AS200` and `AS300`
 > 
@@ -85,7 +86,7 @@ Per garantire che il routing all'interno dell'AS avvenga in modo ordinato, evita
 
 MPLS è un protocollo per la distribuzione delle rotte la quale idea chiave è quella di associare un identificatore, chiamato *label*, ad ogni pacchetto per semplificare il loro routing e migliorare l'efficienza del loro trasporto attraverso la rete.
 
-- ##### MPLS-Initialization
+- #### MPLS-Initialization
 
 Per aggiungere il supporto al protocollo MPLS in maniera persistente, è necessario seguire i passi sotto descritti:
 
@@ -114,7 +115,7 @@ Se viene mostrato il messaggio `MPLS support enabled: yes`, il processo è andat
 
 Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con la configurazione delle singole stazioni all'interno dell'Autonomous System
 
-- ##### R101
+- #### R101
   
   Si procede con la configurazione delle interfacce `eth0`, `eth1` e di loopback `lo`
   
@@ -203,7 +204,7 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   !
   ```
 
-- ##### R102
+- #### R102
   
   Si procede con la configurazione delle interfacce `eth0`, `eth1` e di loopback `lo`
   
@@ -280,7 +281,7 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   !
   ```
 
-- ##### R103
+- #### R103
   
   Si procede con la configurazione delle interfacce `eth0`, `eth1` e di loopback `lo`
   
@@ -369,7 +370,8 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   !
   ```
 
-#### AS200
+### AS200
+<img align="right" width=35% src="images/AS200.png">
 
 > `AS200` is a customer AS connected to `AS100`, which provides transit services.
 > 
@@ -395,7 +397,7 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
 
 Di seguito si procede con la configurazione delle singole stazioni all'interno dell'Autonomous System
 
-- ##### R201
+- #### R201
   
   Si procede con la configurazione delle interfacce `eth0`, `eth1` e di loopback `lo`
   
@@ -498,7 +500,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
       !
   ```
 
-- ##### R203
+- #### R203
   
   Si procede con la configurazione delle interfacce `eth0`, `eth1` e della default route verso `R202`
   
@@ -553,7 +555,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   
   Si procede con la configurazione del client della LAN
   
-  - ##### Client-200
+  - #### Client-200
     
     Il client è implementato tramite una macchia virtuale contenente *Lubuntu 22.04.3*, si entra nel terminale e si configura l'indirizzo dell'interfaccia `enp0s8` e della default route verso il router `R203` con i privilegi di amministratore
     
@@ -564,7 +566,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
     
     Dopo aver effettuato le configurazioni di rete si procede con l'implementazione del MAC (Mandatory Access Control).
     
-    ##### MAC-AppArmor
+    #### MAC-AppArmor
     
     Il modulo MAC scelto è stato AppArmor: questo segue un paradigma per cui ogni processo può avere un profilo proprio che consiste in una serie di limitazioni e capabilities. Se un processo non possiede un profilo, viene eseguito con una schema DAC tradizionale.
     
@@ -626,7 +628,8 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
     sudo aa-logprof
     ```
 
-#### AS300
+### AS300
+<img align="right" width=35% src="images/AS300.png">
 
 > `AS300` is a customer AS connected to `S100`, which provides transit services. It also has a lateral peering relationship with `AS400`.
 > 
@@ -650,7 +653,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
 
 Di seguito si procede con la configurazione delle singole stazioni all'interno dell'Autonomous System
 
-- ##### R301
+- #### R301
   
   Si procede con la configurazione delle interfacce `eth0`, `eth1` e di loopback `lo`
   
@@ -699,7 +702,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   !
   ```
 
-- ##### R302
+- #### R302
   
   Si procede con la configurazione delle interfacce `eth0`, `eth1` e di loopback `lo`
   
@@ -756,7 +759,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   !
   ```
 
-- ##### GW300
+- #### GW300
   
   Si procede con la configurazione dell'interfaccia `eth2` e della default route verso `R302` con la conseguente abilitazione per il forwarding degli indirizzi IP
   
@@ -790,7 +793,10 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   iptables -A FORWARD -i eth0.100 -o eth0.200 -j DROP
   ```
 
-#### Datacenter
+### Datacenter
+<p align="center">
+  <img width=90% src="images/DC_image.png">
+</p>
 
 Questa sezione illustra l'implementazione di una topologia a due livelli leaf-spine Clos all'interno del data center di AS 200. All'interno della rete cloud, ci sono due tenant (A e B), ciascuno ospita due macchine virtuali collegate a leaf1 e leaf2. A ciascun tenant viene assegnato un dominio di broadcast, garantendo segmentazione e isolamento distinti per i rispettivi ambienti. La configurazione è adattata per soddisfare requisiti specifici:
 
@@ -799,7 +805,7 @@ Questa sezione illustra l'implementazione di una topologia a due livelli leaf-sp
 2. Due interfacce VXLAN L3VNI che permettono per abilitare la connettività verso l'esterno tenendo separati i domini di broadcast associati a rispettivi tenant A e tenant B.
    
    Per completezza, si specifica che le due spines e le due leaf sono macchine virtuali contenenti Cumulus Linux v.4.1.0
-- ##### Spines
+- #### Spines
   
   La configurazione per entrambe le spine è quasi identica, quindi ci concentreremo nel dettagliare l'impostazione per la spine 1.
   
@@ -835,7 +841,7 @@ Questa sezione illustra l'implementazione di una topologia a due livelli leaf-sp
   
   Inizialmente è stato configurato un numero di sistema autonomo comune per tutte le spine della topologia, e per ciascuna di esse è stato definito un router-id. Successivamente, è stata stabilita una relazione di peer BGP attraverso le interfacce swp1 e swp2. Il remote AS per entrambi i peer è stato impostato come "external", indicando che si tratta di router esterni non specificati. Infine, è stato attivato il supporto per BGP EVPN attraverso i comandi "net add bgp evpn neighbor swp1 activate" e "net add bgp evpn neighbor swp2 activate". Questa configurazione consente al dispositivo di partecipare attivamente al protocollo BGP e di implementare estensioni specifiche come BGP EVPN, permettendo il trasporto di informazioni sulla raggiungibilità degli endpoint su una rete Ethernet.
 
-- ##### Leaves
+- #### Leaves
   
   La configurazione delle due foglie è quasi identica, quindi ci concentreremo nel dettagliare la foglia 1, per poi descrivere i comandi aggiuntivi che le sono stati assegnati per consentire la connettività verso l'esterno del datacenter.
   
@@ -933,7 +939,7 @@ Questa sezione illustra l'implementazione di una topologia a due livelli leaf-sp
   net add bgp vrf TENB evpn default-originate ipv4
   ```
 
-- ##### End-hosts
+- #### End-hosts
   
   Gli end-host della topologia sono costituiti da container Linux di base, in cui si configura una route predefinita verso la rispettiva leaf e si assegna un indirizzo IP all'interfaccia di rete. Prendendo il server A1 come esempio, abbiamo:
   
@@ -942,7 +948,8 @@ Questa sezione illustra l'implementazione di una topologia a due livelli leaf-sp
   ip route add default via 3.2.10.254
   ```
 
-#### AS400
+### AS400
+<img align="right" width=35% src="images/AS400.png">
 
 > `AS400` has a lateral peering relationship with `AS300`.
 > 
@@ -964,7 +971,7 @@ Questa sezione illustra l'implementazione di una topologia a due livelli leaf-sp
 
 Di seguito è specificata la configurazione delle singole stazioni all'interno dell'Autonomous System 400
 
-- ##### R401
+- #### R401
   
   Si procede con la configurazione delle interfacce `eth0`, `eth1` e di loopback `lo`
   
@@ -1011,7 +1018,7 @@ Di seguito è specificata la configurazione delle singole stazioni all'interno d
   !
   ```
 
-- ##### R402
+- #### R402
   
   Si procede con la configurazione delle interfacce `eth0`, `eth1` e della default route verso `R202`
   
@@ -1032,7 +1039,7 @@ Di seguito è specificata la configurazione delle singole stazioni all'interno d
   
   Si procede con la configurazione del client della LAN
   
-  - ##### Client-400
+  - #### Client-400
     
     Si configura l'indirizzo dell'interfaccia `eth1` e della default route verso il router `R402`
     
@@ -1041,19 +1048,19 @@ Di seguito è specificata la configurazione delle singole stazioni all'interno d
     ip route add default via 192.168.40.1
     ```
 
-#### OpenVPN
+### OpenVPN
 
 Si configura una overlay VPN di indirizzo `192.168.100.0/24`, modello hub-and-spoke e di topologia come segue
 
 <p align="center">
-  <img width="360" height="200" src="https://picsum.photos/460/300">
+  <img width=50% src="images/OVPN_topology.png">
 </p>
 
 Per prima cosa si procede con la generazione dei certificati necessari al servizio garantendone la persistenza.
 
 Pre-requisito fondamentale è indicare, prima dell'attivazione all'interno della configurazione avanzata delle stazioni, la directory `/root` come directory da mandare in persistenza. Oltretutto essendo `Client-200` una macchina virtuale Lubuntu, bisogna procede all'installazione del servizio.
 
-- ##### Installazione di OpenVPN su Lubuntu 22.04.3
+- #### Installazione di OpenVPN su Lubuntu 22.04.3
   
   Per installare la chiave del repository OpenVPN utilizzata dai pacchetti OpenVPN3 per Linux, aggiungere la corretta repository per l'attuale versione di Lubuntu ed installare il servizio sulla macchina, si fa uso dei seguenti comandi
   
