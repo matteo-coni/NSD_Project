@@ -1,21 +1,18 @@
 uBridge version 0.9.16 running with Npcap version 1.72, based on libpcap version 1.10.2-PRE-GIT
-Hypervisor TCP control server started (IP localhost port 32021).
-UDP tunnel connecting from local port 10043 to IPv4 addresss 127.0.0.1 on port 10042
+Hypervisor TCP control server started (IP localhost port 25622).
+UDP tunnel connecting from local port 10047 to IPv4 addresss 127.0.0.1 on port 10046
 UDP tunnel connecting from local port 10001 to IPv4 addresss 127.0.0.1 on port 10000
 Source NIO listener thread for VBOX-6ddf79df-55e2-4c24-9dfc-3184e2d31194-1 has started
 Destination NIO listener thread for VBOX-6ddf79df-55e2-4c24-9dfc-3184e2d31194-1 has started
-UDP tunnel connecting from local port 10047 to IPv4 addresss 127.0.0.1 on port 10046
+UDP tunnel connecting from local port 10051 to IPv4 addresss 127.0.0.1 on port 10050
 UDP tunnel connecting from local port 10003 to IPv4 addresss 127.0.0.1 on port 10002
 Source NIO listener thread for VBOX-6ddf79df-55e2-4c24-9dfc-3184e2d31194-2 has started
 Destination NIO listener thread for VBOX-6ddf79df-55e2-4c24-9dfc-3184e2d31194-2 has started
-UDP tunnel connecting from local port 10051 to IPv4 addresss 127.0.0.1 on port 10050
+UDP tunnel connecting from local port 10055 to IPv4 addresss 127.0.0.1 on port 10054
 UDP tunnel connecting from local port 10004 to IPv4 addresss 192.168.56.101 on port 20022
 Source NIO listener thread for VBOX-6ddf79df-55e2-4c24-9dfc-3184e2d31194-3 has started
 Destination NIO listener thread for VBOX-6ddf79df-55e2-4c24-9dfc-3184e2d31194-3 has started
-UDP tunnel connecting from local port 10055 to IPv4 addresss 127.0.0.1 on port 10054
+UDP tunnel connecting from local port 10059 to IPv4 addresss 127.0.0.1 on port 10058
 UDP tunnel connecting from local port 10005 to IPv4 addresss 192.168.56.101 on port 20023
 Source NIO listener thread for VBOX-6ddf79df-55e2-4c24-9dfc-3184e2d31194-4 has started
 Destination NIO listener thread for VBOX-6ddf79df-55e2-4c24-9dfc-3184e2d31194-4 has started
-Hypervisor: closing control sockets.
-Hypervisor: closing remote client connections.
-Hypervisor: stopped.
