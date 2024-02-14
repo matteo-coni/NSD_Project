@@ -12,8 +12,8 @@ ip addr add 3.10.10.1/16 dev eth0.200
 ip link set eth0.100 up
 ip link set eth0.200 up
 
-ip route add 3.12.0.0/24 via 3.10.10.254 dev eth0.100
-ip route add 3.12.1.0/24 via 3.10.10.254 dev eth0.200
+ip route add 3.2.10.0/24 via 3.10.10.254 dev eth0.100
+ip route add 3.2.20.0/24 via 3.10.10.254 dev eth0.200
 
 iptables -t nat -A POSTROUTING -o eth2 -j MASQUERADE
 
