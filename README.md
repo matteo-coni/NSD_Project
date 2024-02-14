@@ -1,49 +1,62 @@
 # Progetto-NSD
-## Progetto per il corso di Network and System Defence dell'Università di Roma Tor Vergata
+
+Progetto per il corso di Network and System Defence dell'Università di Roma Tor Vergata
+
 __Autori__
+
 * :man_technologist: Matteo Coni (matricola 0333880 )
 * :man_technologist: Marco Purificato (matricola 0350312)
 * :man_technologist: Roberto Fardella (matricola 0334186)
 
-## Topology
+#### Topology
 
 <p align="center">
   <img width="460" height="300" src="https://picsum.photos/460/300">
 </p>
 
-## Table of contents
+#### Table of contents
 
 1. [AS100](#AS100)
-    1. [MPLS - Initialization](#MPLS-Initialization)
-    2. [R101](#R101)
-    3. [R102](#R102)
-    4. [R103](#R103)
+   
+   1. [MPLS - Initialization](#MPLS-Initialization)
+   2. [R101](#R101)
+   3. [R102](#R102)
+   4. [R103](#R103)
 
-2.  [AS200](#AS200)
-    1. [R201](#R201)
-    2. [R202](#R202)
-    3. [R203](#R203)
-       1. [Client-200](#Client-200)
-           1. [MAC - AppArmor](#MAC-AppArmor)
-
- 3. [AS300](#AS300)
-    1. [R301](#R301)
-    2. [R302](#R302)
-    3. [GW300](#GW300)
-    4. [Datacenter](#Datacenter)
-       1. [Spines](#Spines)
-       2. [Leaves](#Leaves)
-       3. [End-Hosts](#End-Hosts)
-
-  4. [AS400](#AS400)
-        1. [R401](#R401)
-        2. [R402](#R402)
-           1. [Client-400](#Client-400)
-
-  6. [OpenVPN](#OpenVPN)
-     1. [Installazione del servizio](#Installazione_di_OpenVPN_su_Lubuntu_22.04.3)
-        
-
+2. [AS200](#AS200)
+   
+   1. [R201](#R201)
+   
+   2. [R202](#R202)
+   
+   3. [R203](#R203)
+      
+      1. [Client-200](#Client-200)
+         1. [MAC - AppArmor](#MAC-AppArmor)
+   
+   4. [AS300](#AS300)
+   
+   5. [R301](#R301)
+   
+   6. [R302](#R302)
+   
+   7. [GW300](#GW300)
+   
+   8. [Datacenter](#Datacenter)
+      
+      1. [Spines](#Spines)
+      2. [Leaves](#Leaves)
+      3. [End-Hosts](#End-Hosts)
+   
+   9. [AS400](#AS400)
+      
+      1. [R401](#R401)
+      2. [R402](#R402)
+         1. [Client-400](#Client-400)
+   
+   10. [OpenVPN](#OpenVPN)
+       
+       1. [Installazione del servizio](#Installazione_di_OpenVPN_su_Lubuntu_22.04.3)
 
 #### BGP
 
@@ -77,19 +90,21 @@ MPLS è un protocollo per la distribuzione delle rotte la quale idea chiave è q
 Per aggiungere il supporto al protocollo MPLS in maniera persistente, è necessario seguire i passi sotto descritti:
 
 1. Aprire la shell all'interno della macchina virtuale GNS3 VM
+
 2. Aprire il file `/etc/modules` con:
+   
+   ```shell
+   nano /etc/modules
+   ```
 
-  ```shell
-  nano /etc/modules
-  ```
 3. Inserire le seguenti righe:
+   
+   ```bash
+   mpls-router
+   mpls-iptunnel
+   ```
 
-  ```bash
-  mpls-router
-  mpls-iptunnel
-  ```
-
-E' possibile poi riavviare e controllare la coretta installazione con il comando
+E' possibile poi riavviare e controllare la corretta installazione con il comando
 
 ```shell
 show mpls status
@@ -264,7 +279,6 @@ Dopo aver preconfigurato i moduli kernel per il protocollo MPLS, si procede con 
   exit
   !
   ```
-  
 
 - ##### R103
   
@@ -494,20 +508,20 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   ip route add default via 2.0.23.1
   ```
   
-  Si abilita il forwarding degli indirizzi IP e si definiscono le variabili di ambiente `LAN` e `NET` per utilizzare nomi simbolici più comprensibili per le interfacce di rete, dove rispettivamente indichiuamo l'interfaccia relativa alla rete `LAN` verso `Client-200` e l'interfaccia verso l'interno di `AS200`. In più si resetta la tabella contenente le regole di firewall e si impostano le policy predefinite per le catena di INPUT, FORWARD e OUTPUT a DROP: ciò significa che tutti i pachetti in entrata, in uscita e inoltrati attraverso il sistema veranno scartati di default se non rispecchiano alcuna regola impostata.
+  Si abilita il forwarding degli indirizzi IP e si definiscono le variabili di ambiente `LAN` e `NET` per utilizzare nomi simbolici più comprensibili per le interfacce di rete, dove rispettivamente indichiamo l'interfaccia relativa alla rete `LAN` verso `Client-200` e l'interfaccia verso l'interno di `AS200`. In più si resetta la tabella contenente le regole di firewall e si impostano le policy predefinite per le catena di INPUT, FORWARD e OUTPUT a DROP: ciò significa che tutti i pacchetti in entrata, in uscita e inoltrati attraverso il sistema verranno scartati di default se non rispecchiano alcuna regola impostata.
   
   ```
   sysctl -w net.ipv4.ip_forward=1
   export LAN=eth1
   export NET=eth0
-
+  
   iptables -F
   iptables -P FORWARD DROP
   iptables -P INPUT DROP
   iptables -P OUTPUT DROP    
   ```
   
-  Successivamente si configurano le regole del firewall attraverso `iptables` (visulizzabili con "iptables -vL"):
+  Successivamente si configurano le regole del firewall attraverso `iptables` (visualizzabili con "iptables -vL"):
   
   - `REGOLA-1`: consente il forwarding del traffico in uscita dalla LAN verso l'`AS200`
     
@@ -522,13 +536,13 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
     ```
   
   - `REGOLA-3`: consente la ricezione, il forward e l'invio di pacchetti ICMP, utilizzati per il comando ping
-
+    
     ```shell
     iptables -A INPUT -p icmp -j ACCEPT
     iptables -A FORWARD -p icmp -j ACCEPT
     iptables -A OUTPUT -p icmp -j ACCEPT
     ```
-    
+  
   - forse da mettere le regole  NAT per openVPN ??????
   
   Dopo aver configurato il firewall si configura il NAT (Network Address Translation), in modo tale da modificare l'indirizzo IP sorgente dei pacchetti inviati dalla LAN da `Client-200` con quello dell'interfaccia `NET` di `R203`, tramite il comando
@@ -580,30 +594,32 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
       #include <abstractions/base>
       #include <abstractions/consoles>
       #include <abstractions/nameservice>
-
+    
       deny capability net_raw,
       capability setuid,
       network inet raw,
       network inet6 raw,
-
+    
       /{,usr}/bin/ping mixr,
       /etc/modules.conf r,
-
+    
     }
     ```
     
     La capability `net_raw` è presente di default in molti sistemi e permette, oltre alla generazione di traffico ICMP verso altre macchine, di creare nuovi "raw packet". Nelle mani di un utente malintenzionato NET_RAW può abilitare un'ampia varietà di exploit di rete dall'interno della macchina e dal relativo cluster. Per questo è stato generato il profilo appena descritto.
-
+    
     Per impostarlo in modalità enforcement si utilizza il comando
     
     ```shell
     sudo aa-enforce /etc/apparmor.d/bin.ping
     ```
+    
     mentre con il seguente comando si ricarica il profilo in caso di modifiche:
     
     ```shell
     sudo apparmor_parser -r /etc/apparmor.d/bin.ping
     ```
+    
     Dopo aver scritto il profilo, per aggiornare tutti profili di AppArmor includendo quello appena scritto, si esegue il comando
     
     ```shell
@@ -739,7 +755,6 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   exit
   !
   ```
-  
 
 - ##### GW300
   
@@ -750,51 +765,54 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   ip route add default via 3.2.23.1
   sysctl -w net.ipv4.ip_forward=1
   ```
+  
   Successivamente si associano le vlan con id 100 e 200 rispettivamente alle interfacce virtuali eth0.100 e eth0.200 per consentire la connettività da e verso l'esterno del datacenter sottostante. Si aggiunge poi l'indirizzo del gateway associato alle due interfacce virtuali. Infine si aggiungono due rotte verso la foglia L1 per raggiungere separatamente i due tenant.
   
   ```shell
   ip link add link eth0 name eth0.100 type vlan id 100
   ip link add link eth0 name eth0.200 type vlan id 200
-
+  
   ip addr add 3.10.10.1/16 dev eth0.100
   ip addr add 3.10.10.1/16 dev eth0.200
-
+  
   ip link set eth0.100 up
   ip link set eth0.200 up
-
+  
   ip route add 3.12.0.0/24 via 3.10.10.254 dev eth0.100
   ip route add 3.12.1.0/24 via 3.10.10.254 dev eth0.200
   ```
+  
   Per concludere si abilita il NAT verso l'interfaccia eth2 (AS300) e vengono bloccati i pacchetti verso l'eth0.200 provenienti dall'eth0.100, per evitare la comunicazione tra i due tenant a causa del gateway in comune.
-
+  
   ```shell
   iptables -t nat -A POSTROUTING -o eth2 -j MASQUERADE
-
+  
   iptables -A FORWARD -i eth0.100 -o eth0.200 -j DROP
   ```
-    
-### Datacenter
-    
-  Questa sezione illustra l'implementazione di una topologia a due livelli leaf-spine Clos all'interno del data center di AS 200. All'interno della rete cloud, ci sono due tenant (A e B), ciascuno ospita due macchine virtuali collegate a leaf1 e leaf2. A ciascun tenant viene assegnato un dominio di broadcast, garantendo segmentazione e isolamento distinti per i rispettivi ambienti. La configurazione è adattata per soddisfare requisiti specifici:
 
-  1. Realizzare l'instradamento VXLAN/EVPN nella rete DC per fornire L2VPNs tra le macchine di un tenant.
-  2. Due interfacce VXLAN L3VNI che permettono per abilitare la connettività verso l'esterno tenendo separati i domini di broadcast associati a rispettivi tenant A e tenant B.
+#### Datacenter
 
+Questa sezione illustra l'implementazione di una topologia a due livelli leaf-spine Clos all'interno del data center di AS 200. All'interno della rete cloud, ci sono due tenant (A e B), ciascuno ospita due macchine virtuali collegate a leaf1 e leaf2. A ciascun tenant viene assegnato un dominio di broadcast, garantendo segmentazione e isolamento distinti per i rispettivi ambienti. La configurazione è adattata per soddisfare requisiti specifici:
+
+1. Realizzare l'instradamento VXLAN/EVPN nella rete DC per fornire L2VPNs tra le macchine di un tenant.
+
+2. Due interfacce VXLAN L3VNI che permettono per abilitare la connettività verso l'esterno tenendo separati i domini di broadcast associati a rispettivi tenant A e tenant B.
+   
    Per completezza, si specifica che le due spines e le due leaf sono macchine virtuali contenenti Cumulus Linux v.4.1.0
-    
-- #### Spines
-
+- ##### Spines
+  
   La configurazione per entrambe le spine è quasi identica, quindi ci concentreremo nel dettagliare l'impostazione per la spine 1.
-
+  
   Questi comandi assegnano gli indirizzi IP alle interfacce specificate e all'interfaccia loopback:
-
+  
   ```shell
   net add interface swp1 ip add 3.1.4.1/30
   net add interface swp2 ip add 3.1.2.1/30
   net add loopback lo ip add 3.4.4.4/32
   ```
+  
   Per la configurazione OSPF, abbiamo:
-
+  
   ```shell
   net add ospf router-id  3.4.4.4
   net add ospf network 3.4.4.4/32 area 0
@@ -803,9 +821,9 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   ```
   
   Utilizzando MP-BGP (Multiprotocol BGP), l'EVPN distribuisce gli indirizzi MAC e IP agli endpoint, trattando gli indirizzi MAC come route. Questo consente una maggiore flessibilità e scalabilità nelle reti Ethernet, specialmente in ambienti multi-tenant e data center.
-
+  
   Configurazione di MP-BGP:
-
+  
   ```shell
   net add bgp autonomous-system 65000
   net add bgp router-id 3.4.4.4
@@ -817,12 +835,12 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   
   Inizialmente è stato configurato un numero di sistema autonomo comune per tutte le spine della topologia, e per ciascuna di esse è stato definito un router-id. Successivamente, è stata stabilita una relazione di peer BGP attraverso le interfacce swp1 e swp2. Il remote AS per entrambi i peer è stato impostato come "external", indicando che si tratta di router esterni non specificati. Infine, è stato attivato il supporto per BGP EVPN attraverso i comandi "net add bgp evpn neighbor swp1 activate" e "net add bgp evpn neighbor swp2 activate". Questa configurazione consente al dispositivo di partecipare attivamente al protocollo BGP e di implementare estensioni specifiche come BGP EVPN, permettendo il trasporto di informazioni sulla raggiungibilità degli endpoint su una rete Ethernet.
 
-- #### Leaves
-   
+- ##### Leaves
+  
   La configurazione delle due foglie è quasi identica, quindi ci concentreremo nel dettagliare la foglia 1, per poi descrivere i comandi aggiuntivi che le sono stati assegnati per consentire la connettività verso l'esterno del datacenter.
-
+  
   Questi comandi configurano un bridge su un router Linux e assegnano specifiche porte al bridge.
-
+  
   ```shell
   net add bridge bridge ports swp3,swp4,swp5
   net add interface swp3 bridge access 10
@@ -830,19 +848,19 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   net add bridge bridge pvid 1
   net add bridge bridge vids 10,20,100,200
   ```
-
+  
   Inizialmente, vengono aggiunte al bridge le porte swp3, swp4 e swp5. Successivamente, la porta swp3 viene assegnata al bridge con VLAN di accesso 10, mentre la porta swp4 viene assegnata con VLAN di accesso 20. Infine, viene impostata la VLAN predefinita del bridge.
-
+  
   Configurazione delle interfacce di rete:
-
+  
   ```shell
   net add interface swp1 ip add 3.1.4.2/30
   net add interface swp2 ip add 3.2.1.2/30
   net add loopback lo ip add 3.1.1.1/32
   ```
-
+  
   Configurazione OSPF:
-
+  
   ```shell
   net add ospf router-id 3.1.1.1
   net add ospf network 3.1.4.0/30 area 0
@@ -850,13 +868,13 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   net add ospf network 3.1.1.1/32 area 0
   net add ospf passive-interface swp3,swp4
   ```
-
+  
   La leaf con l'ultimo comando non invierà attivamente i messaggi OSPF tramite tramite le interfacce swp3 e swp4 che raggiungono gli end-host della rete del datacenter.
-
+  
   Configurazione VXLAN/EVPN:
-
+  
   Sono configurate due interfacce VXLAN, vni10 e vni20, con ID rispettivamente 10 e 20. La procedura di configurazione abilita l'apprendimento del bridge sul dispositivo VXLAN, mappando la VLAN di accesso 10 all'interfaccia VXLAN vni10 e lo stesso per la VLAN 20. Successivamente, l'indirizzo IP del tunnel locale viene impostato per corrispondere all'indirizzo di loopback della Cumulus VM.
-
+  
   ```shell
   net add vxlan vni10 vxlan id 10
   net add vxlan vni10 vxlan local-tunnelip 3.1.1.1
@@ -865,9 +883,9 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   net add vxlan vni20 vxlan local-tunnelip 3.1.1.1
   net add vxlan vni20 bridge access 20
   ```
-
+  
   A seguire la configurazione che permette al dispositivo di partecipare attivamente al protocollo BGP, estendendo le funzionalità per supportare EVPN ed esportando infine, tutte le vni (virtual network identifier):
-
+  
   ```shell
   net add bgp autonomous-system 65001
   net add bgp router-id 3.1.1.1
@@ -877,16 +895,16 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   net add bgp evpn neighbor swp2 activate
   net add bgp evpn advertise-all-vni
   ```
-
+  
   Si assegnano degli indirizzi ip alle VTEP per poter partecipare attivamente al routing e all'instradamento del traffico VXLAN attraverso la rete:
-
+  
   ```shell
   net add vlan 10 ip address 3.2.10.254/24
   net add vlan 20 ip address 3.2.20.254/24
   ```
-
+  
   Istanziate due tabelle di routing virtuali (VRF) per consentire la connettività da e verso l'esterno dalla rete del datacenter. Ognuna di esse è associata ad un dominio di broadcast, che a loro volta separano e ne rappresentano il tenant A ed il tenant B della topologia leaf-spine.
-
+  
   ```shell
   net add vlan 100 ip address 3.10.10.254/16
   net add vlan 200 ip address 3.10.10.254/16
@@ -895,29 +913,30 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   net add vlan 200 vrf TENB
   net add vlan 20 vrf TENB
   ```
+  
   Successivamente è stato configurato un gateway IP per le VLAN 100 e 200. Il gateway IP funge da punto di uscita per il traffico generato dai dispositivi all'interno del datacenter e destinato a reti esterne.
-
+  
   ```shell
   net add vlan 100 ip gateway 3.10.10.1
   net add vlan 200 ip gateway 3.10.10.1
   ```
-
+  
   I seguenti comandi configurano il protocollo BGP all'interno di un VRF specifico, consentendo la pubblicazione degli indirizzi IPv4 unicast e la generazione di un percorso predefinito per IPv4 all'interno di tale VRF utilizzando EVPN. Ciò è ripetuto per entrambi i tenants, come riportato:
-
+  
   ```shell
   net add bgp vrf TENA autonomous-system 65001
   net add bgp vrf TENA evpn advertise ipv4 unicast
   net add bgp vrf TENA evpn default-originate ipv4
-
+  
   net add bgp vrf TENB autonomous-system 65001
   net add bgp vrf TENB evpn advertise ipv4 unicast
   net add bgp vrf TENB evpn default-originate ipv4
   ```
 
-- #### End-hosts
+- ##### End-hosts
   
   Gli end-host della topologia sono costituiti da container Linux di base, in cui si configura una route predefinita verso la rispettiva leaf e si assegna un indirizzo IP all'interfaccia di rete. Prendendo il server A1 come esempio, abbiamo:
-
+  
   ```shell
   ip addr add 3.2.10.1/24 dev eth0
   ip route add default via 3.2.10.254
@@ -1021,7 +1040,6 @@ Di seguito è specificata la configurazione delle singole stazioni all'interno d
     ip addr add 192.168.40.2/24 dev eth1 
     ip route add default via 192.168.40.1
     ```
-    
 
 #### OpenVPN
 
@@ -1033,7 +1051,7 @@ Si configura una overlay VPN di indirizzo `192.168.100.0/24`, modello hub-and-sp
 
 Per prima cosa si procede con la generazione dei certificati necessari al servizio garantendone la persistenza.
 
-Pre-requisito fondamentale è indicare, prima dell'attivzione all'interno della configurazione avanzata delle stazioni, la directory `/root` come directory da mandare in persistenza. Oltretutto essendo `Client-200` una macchina virtuale Lubuntu, bisogna procede all'installazione del servizio.
+Pre-requisito fondamentale è indicare, prima dell'attivazione all'interno della configurazione avanzata delle stazioni, la directory `/root` come directory da mandare in persistenza. Oltretutto essendo `Client-200` una macchina virtuale Lubuntu, bisogna procede all'installazione del servizio.
 
 - ##### Installazione di OpenVPN su Lubuntu 22.04.3
   
@@ -1079,7 +1097,7 @@ e poi si generano i parametri di Diffie Hellman per il server ( ricerca di un nu
 ./easyrsa gen-dh
 ```
 
-per garantire la persistenza dei certifiati generati per il server ed i client si eseguono poi i seguenti comandi:
+per garantire la persistenza dei certificati generati per il server ed i client si eseguono poi i seguenti comandi:
 
 ```shell
 mkdir /root/CA
@@ -1107,7 +1125,7 @@ cd ovpn
 vim ca.crt
 ```
 
-e dentro si incolla il contenuto salvato nel server e cioè il certificato corrispondente. Poi eseguo lo stesso con i cetificati e le chiavi ognuno per il proprio client, dove nei file <nome_client>.crt copio solo la chiave finale
+e dentro si incolla il contenuto salvato nel server e cioè il certificato corrispondente. Poi eseguo lo stesso con i certificati e le chiavi ognuno per il proprio client, dove nei file <nome_client>.crt copio solo la chiave finale
 
 ```shell
 #in Client-200
@@ -1147,6 +1165,7 @@ Dopo aver generato e mandato in persistenza i certificati si procede con la conf
   server 192.168.100.0 255.255.255.0
   push "route 192.168.200.2 255.255.255.255"
   push "route 192.168.40.0 255.255.255.0"
+  push "route 3.2.10.0 255.255.255.0"
   route 192.168.200.2 255.255.255.255
   route 192.168.40.0 255.255.255.0
   client-config-dir ccd
@@ -1211,7 +1230,7 @@ Dopo aver generato e mandato in persistenza i certificati si procede con la conf
   Successivamente si concede all'utente root l'accesso al profilo di configurazione `Client-200` importato, tramite il comando
   
   ```shell
-  openvpn3 config-acl --show --lock-down true --grant root --config Client-200
+  openvpn3 config-acl --show --lock-down true --grant root --config Client-200 --transfer-owner-session true
   ```
   
   Dopo aver mandato in persistenza il file di configurazione si avvia il servizio nell'immediato ( tramite l'argomento `--now`) e si imposta il suo avvio automatico ad ogni accensione della macchina virtuale
@@ -1240,5 +1259,3 @@ Dopo aver generato e mandato in persistenza i certificati si procede con la conf
   ```shell
   openvpn R402.ovpn &
   ```
-
-sdadad
