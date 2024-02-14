@@ -1,4 +1,4 @@
-#leaves - bridge (access 10 è il tenant A)
+#leaves - bridge 
 net add bridge bridge ports swp3,swp4,swp5
 net add interface swp3 bridge access 10
 net add interface swp4 bridge access 20
@@ -35,8 +35,8 @@ net add bgp evpn neighbor swp2 activate
 net add bgp evpn advertise-all-vni
 
 #ip address in vteps
-net add vlan 10 ip address 3.12.0.254/24
-net add vlan 20 ip address 3.12.1.254/24
+net add vlan 10 ip address 3.2.10.254/24
+net add vlan 20 ip address 3.2.20.254/24
 
 
 net add vlan 100 ip address 3.10.10.254/16
