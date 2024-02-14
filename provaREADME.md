@@ -766,14 +766,12 @@ Per concludere si abilita il NAT verso l'interfaccia eth2 (AS300) e vengono bloc
 
   iptables -A FORWARD -i eth0.100 -o eth0.200 -j DROP
 ```
-  
-  asdsad
-  
-##### Data Center
+    
+### Data Center
     
 Questa sezione illustra l'implementazione di una topologia a due livelli leaf-spine Clos all'interno del data center di AS 200. All'interno della rete cloud, ci sono due tenant (A e B), ciascuno ospita due macchine virtuali collegate a leaf1 e leaf2. A ciascun tenant viene assegnato un dominio di broadcast, garantendo segmentazione e isolamento distinti per i rispettivi ambienti. La configurazione è adattata per soddisfare requisiti specifici:
 
-1. Realizzare l'instradamento VXLAN/EVPN nella rete DC per fornire L2VPNs tra le macchine dei tenant.
+1. Realizzare l'instradamento VXLAN/EVPN nella rete DC per fornire L2VPNs tra le macchine di un tenant.
 2. Due interfacce VXLAN L3VNI che permettono per abilitare la connettività verso l'esterno tenendo separati i domini di broadcast associati a rispettivi tenant A e tenant B.
 
    Per completezza, si specifica che le due spines e le due leaf sono macchine virtuali contenenti Cumulus Linux v.4.1.0
@@ -813,7 +811,7 @@ Questa sezione illustra l'implementazione di una topologia a due livelli leaf-sp
   
   Inizialmente è stato configurato un numero di sistema autonomo comune per tutte le spine della topologia, e per ciascuna di esse è stato definito un router-id. Successivamente, è stata stabilita una relazione di peer BGP attraverso le interfacce swp1 e swp2. Il remote AS per entrambi i peer è stato impostato come "external", indicando che si tratta di router esterni non specificati. Infine, è stato attivato il supporto per BGP EVPN attraverso i comandi "net add bgp evpn neighbor swp1 activate" e "net add bgp evpn neighbor swp2 activate". Questa configurazione consente al dispositivo di partecipare attivamente al protocollo BGP e di implementare estensioni specifiche come BGP EVPN, permettendo il trasporto di informazioni sulla raggiungibilità degli endpoint su una rete Ethernet.
 
- - #### Leaves
+- #### Leaves
    
   La configurazione delle due foglie è quasi identica, quindi ci concentreremo nel dettagliare la foglia 1, per poi descrivere i comandi aggiuntivi che le sono stati assegnati per consentire la connettività verso l'esterno del datacenter.
 
