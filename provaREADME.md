@@ -566,7 +566,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
       #include <abstractions/consoles>
       #include <abstractions/nameservice>
 
-      **deny** capability net_raw,
+      deny capability net_raw,
       capability setuid,
       network inet raw,
       network inet6 raw,
@@ -882,8 +882,14 @@ Per concludere si abilita il NAT verso l'interfaccia eth2 (AS300) e vengono bloc
   net add vlan 200 vrf TENB
   net add vlan 20 vrf TENB
   ```
+  Successivamente è stato configurato un gateway IP per le VLAN 100 e 200. Il gateway IP funge da punto di uscita per il traffico generato dai dispositivi all'interno del datacenter e destinato a reti esterne.
 
-  Comandi aggiuntivi alla leaf 1 per pubblicizzare le rotte evpn? e dire che il leaf1 rappresenta il gateway di default per far transitare i pacchetti in entrata ed uscita dal datacenter.
+```shell
+  net add vlan 100 ip gateway 3.10.10.1
+  net add vlan 200 ip gateway 3.10.10.1
+  ```
+
+  I seguenti comandi configurano il protocollo BGP all'interno di un VRF specifico, consentendo la pubblicazione degli indirizzi IPv4 unicast e la generazione di un percorso predefinito per IPv4 all'interno di tale VRF utilizzando EVPN. Ciò è ripetuto per entrambi i tenants, come riportato:
 
   ```shell
   net add bgp vrf TENA autonomous-system 65001
