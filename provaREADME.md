@@ -507,7 +507,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   iptables -P OUTPUT DROP    
   ```
   
-  Successivamente si configurano le regole del firewall attraverso `iptables`:
+  Successivamente si configurano le regole del firewall attraverso `iptables` (visulizzabili con "iptables -vL"):
   
   - `REGOLA-1`: consente il forwarding del traffico in uscita dalla LAN verso l'`AS200`
     
