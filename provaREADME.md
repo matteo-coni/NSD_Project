@@ -27,12 +27,12 @@
        3. [End-Hosts](#End-Hosts)
 
   4. [AS400](#AS400)
-    1. [R401](#R401)
-    2. [R402](#R402)
-       1. [Client-400](#Client-400)
+        1. [R401](#R401)
+        2. [R402](#R402)
+           1. [Client-400](#Client-400)
 
-  5. [OpenVPN](#OpenVPN)
-     1. [Installazione del servizio](#Installazione)
+  6. [OpenVPN](#OpenVPN)
+     1. [Installazione del servizio](#Installazione_di_OpenVPN_su_Lubuntu_22.04.3)
         
 
 
