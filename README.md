@@ -510,43 +510,37 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   ip route add default via 2.0.23.1
   ```
   
-  Si abilita il forwarding degli indirizzi IP e si definiscono le variabili di ambiente `LAN` e `NET` per utilizzare nomi simbolici più comprensibili per le interfacce di rete, dove rispettivamente indichiamo l'interfaccia relativa alla rete `LAN` verso `Client-200` e l'interfaccia verso l'interno di `AS200`. In più si resetta la tabella contenente le regole di firewall e si impostano le policy predefinite per le catena di INPUT, FORWARD e OUTPUT a DROP: ciò significa che tutti i pacchetti in entrata, in uscita e inoltrati attraverso il sistema verranno scartati di default se non rispecchiano alcuna regola impostata.
-  
-  ```
-  sysctl -w net.ipv4.ip_forward=1
-  export LAN=eth1
-  export NET=eth0
-  
+  Si abilita il forwarding degli indirizzi IP e si definiscono le variabili di ambiente `LAN` e `NET` per utilizzare nomi simbolici più comprensibili per le interfacce di rete, dove rispettivamente indichiamo l'interfaccia relativa alla rete `LAN` verso `Client-200` e l'interfaccia verso l'interno di `AS200`.
+
+  Successivamente si configura un semplice firewall e tramite i seguenti comandi si vuota tutte le regole settate in precedenza e scarta tutti i pacchetti, inoltrati, destinati e generati dal sistema non corrispondenti a nessuna regola.
+
+  ```shell
   iptables -F
   iptables -P FORWARD DROP
   iptables -P INPUT DROP
-  iptables -P OUTPUT DROP    
+  iptables -P OUTPUT DROP
   ```
+ 
+  Accetta tutti i pacchetti inoltrati che arrivano dall'interfaccia di rete locale e sono destinati alla rete esterna
+
+  ```shell
+  iptables -A FORWARD -i $LAN -o $NET -j ACCEPT
+  ```
+
+  Accetta tutti i pacchetti inoltrati che appartengono a connessioni già stabilite
+
+  ```shell
+  iptables -A FORWARD -m state --state ESTABLISHED -j ACCEPT
+  ```
+
+  Il traffico proveniente dal server OpenVPN, non è stato considerato nelle regole di firewall in quanto la connessione VPN stabilisce, per sua natura, un tunnel crittografato end-to-end che impedisce l'accesso non autorizzato al di fuori del server VPN.
+
+  <p align="center">
+    <img width=50% src="images/firewall_ovpn.png"></p>
+    [Rif. immagine: <a href="https://wwwdisc.chimica.unipd.it/luigino.feltre/pubblica/unix/winnt_doc/2000/inbe_vpn_hidv.html">unipd</a>]
+  </p>
   
-  Successivamente si configurano le regole del firewall attraverso `iptables` (visualizzabili con "iptables -vL"):
-  
-  - `REGOLA-1`: consente il forwarding del traffico in uscita dalla LAN verso l'`AS200`
-    
-    ```shell
-    iptables -A FORWARD -i $LAN -o $NET -j ACCEPT
-    ```
-  
-  - `REGOLA-2`: consente il forwarding del traffico associato a connessioni già stabilite
-    
-    ```shell
-    iptables -A FORWARD -m state --state ESTABLISHED -j ACCEPT
-    ```
-  
-  - `REGOLA-3`: consente la ricezione, il forward e l'invio di pacchetti ICMP, utilizzati per il comando ping
-    
-    ```shell
-    iptables -A INPUT -p icmp -j ACCEPT
-    iptables -A FORWARD -p icmp -j ACCEPT
-    iptables -A OUTPUT -p icmp -j ACCEPT
-    ```
-  
-  - forse da mettere le regole  NAT per openVPN ??????
-  
+
   Dopo aver configurato il firewall si configura il NAT (Network Address Translation), in modo tale da modificare l'indirizzo IP sorgente dei pacchetti inviati dalla LAN da `Client-200` con quello dell'interfaccia `NET` di `R203`, tramite il comando
   
   ```shell
