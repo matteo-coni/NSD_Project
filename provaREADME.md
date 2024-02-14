@@ -460,12 +460,17 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   ip route add default via 2.0.23.1
   ```
   
-  Si abilita il forwarding degli indirizzi IP e si definiscono le variabili di ambiente `LAN` e `NET` per utilizzare nomi simbolici più comprensibili per le interfacce di rete, dove rispettivamente indichiuamo l'interfaccia relativa alla rete `LAN` verso `Client-200` e l'interfaccia verso l'interno di `AS200`.
+  Si abilita il forwarding degli indirizzi IP e si definiscono le variabili di ambiente `LAN` e `NET` per utilizzare nomi simbolici più comprensibili per le interfacce di rete, dove rispettivamente indichiuamo l'interfaccia relativa alla rete `LAN` verso `Client-200` e l'interfaccia verso l'interno di `AS200`. In più si resetta la tabella contenente le regole di firewall e si impostano le policy predefinite per le catena di INPUT, FORWARD e OUTPUT a DROP: ciò significa che tutti i pachetti in entrata, in uscita e inoltrati attraverso il sistema veranno scartati di default se non rispecchiano alcuna regola impostata.
   
   ```
   sysctl -w net.ipv4.ip_forward=1
   export LAN=eth1
-  export NET=eth0     
+  export NET=eth0
+
+  iptables -F
+  iptables -P FORWARD DROP
+  iptables -P INPUT DROP
+  iptables -P OUTPUT DROP    
   ```
   
   Successivamente si configurano le regole del firewall attraverso `iptables`:
