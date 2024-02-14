@@ -1212,7 +1212,7 @@ Dopo aver generato e mandato in persistenza i certificati si procede con la conf
   client
   dev tun
   proto udp
-  remote 3.0.23.2 1194
+  remote 3.2.23.2 1194
   resolv-retry infinite
   ca ca.crt
   cert Client-200.crt
@@ -1247,7 +1247,7 @@ Dopo aver generato e mandato in persistenza i certificati si procede con la conf
   client
   dev tun
   proto udp
-  remote 3.0.23.2 1194
+  remote 3.2.23.2 1194
   resolv-retry infinite
   ca ca.crt
   cert R402.crt
