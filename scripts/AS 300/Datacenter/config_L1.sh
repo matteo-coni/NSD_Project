@@ -1,0 +1,60 @@
+#leaves - bridge (access 10 è il tenant A)
+net add bridge bridge ports swp3,swp4,swp5
+net add interface swp3 bridge access 10
+net add interface swp4 bridge access 20
+net add bridge bridge pvid 1
+net add bridge bridge vids 10,20,100,200
+
+#leaves - ip address
+net add interface swp1 ip add 3.1.4.2/30
+net add interface swp2 ip add 3.2.1.2/30
+net add loopback lo ip add 3.1.1.1/32
+
+#OSPF
+net add ospf router-id 3.1.1.1
+net add ospf network 3.1.4.0/30 area 0
+net add ospf network 3.2.1.0/30 area 0
+net add ospf network 3.1.1.1/32 area 0
+net add ospf passive-interface swp3,swp4
+
+#VXLAN
+net add vxlan vni10 vxlan id 10
+net add vxlan vni10 vxlan local-tunnelip 3.1.1.1
+net add vxlan vni10 bridge access 10
+net add vxlan vni20 vxlan id 20
+net add vxlan vni20 vxlan local-tunnelip 3.1.1.1
+net add vxlan vni20 bridge access 20
+
+#MP-eBGP
+net add bgp autonomous-system 65001
+net add bgp router-id 3.1.1.1
+net add bgp neighbor swp1 remote-as 65000
+net add bgp neighbor swp2 remote-as 65000
+net add bgp evpn neighbor swp1 activate
+net add bgp evpn neighbor swp2 activate
+net add bgp evpn advertise-all-vni
+
+#ip address in vteps
+net add vlan 10 ip address 3.12.0.254/24
+net add vlan 20 ip address 3.12.1.254/24
+
+
+net add vlan 100 ip address 3.10.10.254/16
+net add vlan 100 ip gateway 3.10.10.1
+
+net add vlan 200 ip address 3.10.10.254/16
+net add vlan 200 ip gateway 3.10.10.1
+
+#BRIDGE VIDS AND VNIS
+net add vlan 100 vrf TENA
+net add vlan 10 vrf TENA
+net add vlan 200 vrf TENB
+net add vlan 20 vrf TENB
+
+net add bgp vrf TENA autonomous-system 65001
+net add bgp vrf TENA evpn advertise ipv4 unicast
+net add bgp vrf TENA evpn default-originate ipv4
+
+net add bgp vrf TENB autonomous-system 65001
+net add bgp vrf TENB evpn advertise ipv4 unicast
+net add bgp vrf TENB evpn default-originate ipv4
