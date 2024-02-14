@@ -744,9 +744,9 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   ip route add default via 3.2.23.1
   sysctl -w net.ipv4.ip_forward=1
   ```
-Successivamente si associano le vlan con id 100 e 200 rispettivamente alle interfacce virtuali eth0.100 e eth0.200 per consentire la connettività da e verso l'esterno del datacenter sottostante. Si aggiunge poi l'indirizzo del gateway associato alle due interfacce virtuali. Infine si aggiungono due rotte verso la foglia L1 per raggiungere separatamente i due tenant.
+  Successivamente si associano le vlan con id 100 e 200 rispettivamente alle interfacce virtuali eth0.100 e eth0.200 per consentire la connettività da e verso l'esterno del datacenter sottostante. Si aggiunge poi l'indirizzo del gateway associato alle due interfacce virtuali. Infine si aggiungono due rotte verso la foglia L1 per raggiungere separatamente i due tenant.
   
-```shell
+  ```shell
   ip link add link eth0 name eth0.100 type vlan id 100
   ip link add link eth0 name eth0.200 type vlan id 200
 
@@ -758,21 +758,21 @@ Successivamente si associano le vlan con id 100 e 200 rispettivamente alle inter
 
   ip route add 3.12.0.0/24 via 3.10.10.254 dev eth0.100
   ip route add 3.12.1.0/24 via 3.10.10.254 dev eth0.200
-```
-Per concludere si abilita il NAT verso l'interfaccia eth2 (AS300) e vengono bloccati i pacchetti verso l'eth0.200 provenienti dall'eth0.100, per evitare la comunicazione tra i due tenant a causa del gateway in comune.
+  ```
+  Per concludere si abilita il NAT verso l'interfaccia eth2 (AS300) e vengono bloccati i pacchetti verso l'eth0.200 provenienti dall'eth0.100, per evitare la comunicazione tra i due tenant a causa del gateway in comune.
 
-```shell
+  ```shell
   iptables -t nat -A POSTROUTING -o eth2 -j MASQUERADE
 
   iptables -A FORWARD -i eth0.100 -o eth0.200 -j DROP
-```
+  ```
     
-### Data Center
+### Datacenter
     
-Questa sezione illustra l'implementazione di una topologia a due livelli leaf-spine Clos all'interno del data center di AS 200. All'interno della rete cloud, ci sono due tenant (A e B), ciascuno ospita due macchine virtuali collegate a leaf1 e leaf2. A ciascun tenant viene assegnato un dominio di broadcast, garantendo segmentazione e isolamento distinti per i rispettivi ambienti. La configurazione è adattata per soddisfare requisiti specifici:
+  Questa sezione illustra l'implementazione di una topologia a due livelli leaf-spine Clos all'interno del data center di AS 200. All'interno della rete cloud, ci sono due tenant (A e B), ciascuno ospita due macchine virtuali collegate a leaf1 e leaf2. A ciascun tenant viene assegnato un dominio di broadcast, garantendo segmentazione e isolamento distinti per i rispettivi ambienti. La configurazione è adattata per soddisfare requisiti specifici:
 
-1. Realizzare l'instradamento VXLAN/EVPN nella rete DC per fornire L2VPNs tra le macchine di un tenant.
-2. Due interfacce VXLAN L3VNI che permettono per abilitare la connettività verso l'esterno tenendo separati i domini di broadcast associati a rispettivi tenant A e tenant B.
+  1. Realizzare l'instradamento VXLAN/EVPN nella rete DC per fornire L2VPNs tra le macchine di un tenant.
+  2. Due interfacce VXLAN L3VNI che permettono per abilitare la connettività verso l'esterno tenendo separati i domini di broadcast associati a rispettivi tenant A e tenant B.
 
    Per completezza, si specifica che le due spines e le due leaf sono macchine virtuali contenenti Cumulus Linux v.4.1.0
     
