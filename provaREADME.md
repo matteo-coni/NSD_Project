@@ -6,6 +6,33 @@
 
 1. [AS100](#AS100)
     1. [MPLS - Initialization](#MPLS-Initialization)
+    2. [R101](#R101)
+    3. [R102](#R102)
+    4. [R103](#R103)
+
+2.  [AS200](#AS200)
+    1. [R201](#R201)
+    2. [R202](#R202)
+    3. [R203](#R203)
+       1. [Client-200](#Client-200)
+           1. [MAC - AppArmor](#MAC-AppArmor)
+
+ 3. [AS300](#AS300)
+    1. [R301](#R301)
+    2. [R302](#R302)
+    3. [GW300](#GW300)
+    4. [Datacenter](#Datacenter)
+       1. [Spines](#Spines)
+       2. [Leaves](#Leaves)
+       3. [End-Hosts](#End-Hosts)
+
+  4. [AS400](#AS400)
+    1. [R401](#R401)
+    2. [R402](#R402)
+       1. [Client-400](#Client-400)
+
+  5. [OpenVPN](#OpenVPN)
+     1. [Installazione del servizio](#Installazione)
         
 
 
@@ -508,7 +535,7 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
     
     Dopo aver effettuato le configurazioni di rete si procede con l'implementazione del MAC (Mandatory Access Control).
     
-    ##### MAC - AppArmor
+    ##### MAC-AppArmor
     
     Il modulo MAC scelto è stato AppArmor: questo segue un paradigma per cui ogni processo può avere un profilo proprio che consiste in una serie di limitazioni e capabilities. Se un processo non possiede un profilo, viene eseguito con una schema DAC tradizionale.
     
@@ -742,7 +769,7 @@ Per concludere si abilita il NAT verso l'interfaccia eth2 (AS300) e vengono bloc
 
    Per completezza, si specifica che le due spines e le due leaf sono macchine virtuali contenenti Cumulus Linux v.4.1.0
     
-   - #### SPINES
+   - #### Spines
 
   La configurazione per entrambe le spine è quasi identica, quindi ci concentreremo nel dettagliare l'impostazione per la spine 1.
 
@@ -868,7 +895,7 @@ Per concludere si abilita il NAT verso l'interfaccia eth2 (AS300) e vengono bloc
   net add bgp vrf TENB evpn default-originate ipv4
   ```
 
-- #### End-host
+- #### End-hosts
   
   Gli end-host della topologia sono costituiti da container Linux di base, in cui si configura una route predefinita verso la rispettiva leaf e si assegna un indirizzo IP all'interfaccia di rete. Prendendo il server A1 come esempio, abbiamo:
 
