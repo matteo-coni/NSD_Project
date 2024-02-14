@@ -1,3 +1,12 @@
+# Progetto-NSD
+## Progetto per il corso di Network and System Defence dell'Università di Roma Tor Vergata
+__Autori__
+* :man_technologist: Matteo Coni (matricola 0333880 )
+* :man_technologist: Marco Purificato (matricola 0350312)
+* :man_technologist: Roberto Fardella (matricola 0334186)
+
+## Topology
+
 <p align="center">
   <img width="460" height="300" src="https://picsum.photos/460/300">
 </p>
@@ -762,14 +771,14 @@ Per concludere si abilita il NAT verso l'interfaccia eth2 (AS300) e vengono bloc
   
 ##### Data Center
     
-    Questa sezione illustra l'implementazione di una topologia a due livelli leaf-spine Clos all'interno del data center di AS 200. All'interno della rete cloud, ci sono due tenant (A e B), ciascuno ospita due macchine virtuali collegate a leaf1 e leaf2. A ciascun tenant viene assegnato un dominio di broadcast, garantendo segmentazione e isolamento distinti per i rispettivi ambienti. La configurazione è adattata per soddisfare requisiti specifici:
+Questa sezione illustra l'implementazione di una topologia a due livelli leaf-spine Clos all'interno del data center di AS 200. All'interno della rete cloud, ci sono due tenant (A e B), ciascuno ospita due macchine virtuali collegate a leaf1 e leaf2. A ciascun tenant viene assegnato un dominio di broadcast, garantendo segmentazione e isolamento distinti per i rispettivi ambienti. La configurazione è adattata per soddisfare requisiti specifici:
 
 1. Realizzare l'instradamento VXLAN/EVPN nella rete DC per fornire L2VPNs tra le macchine dei tenant.
 2. Due interfacce VXLAN L3VNI che permettono per abilitare la connettività verso l'esterno tenendo separati i domini di broadcast associati a rispettivi tenant A e tenant B.
 
    Per completezza, si specifica che le due spines e le due leaf sono macchine virtuali contenenti Cumulus Linux v.4.1.0
     
-   - #### Spines
+- #### Spines
 
   La configurazione per entrambe le spine è quasi identica, quindi ci concentreremo nel dettagliare l'impostazione per la spine 1.
 
