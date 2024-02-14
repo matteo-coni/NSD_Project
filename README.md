@@ -34,29 +34,29 @@ __Autori__
       1. [Client-200](#Client-200)
          1. [MAC - AppArmor](#MAC-AppArmor)
    
-   4. [AS300](#AS300)
+3. [AS300](#AS300)
    
-   5. [R301](#R301)
+   1. [R301](#R301)
    
-   6. [R302](#R302)
+   2. [R302](#R302)
    
-   7. [GW300](#GW300)
+   3. [GW300](#GW300)
    
-   8. [Datacenter](#Datacenter)
+4. [Datacenter](#Datacenter)
       
       1. [Spines](#Spines)
       2. [Leaves](#Leaves)
       3. [End-Hosts](#End-Hosts)
    
-   9. [AS400](#AS400)
+5. [AS400](#AS400)
       
       1. [R401](#R401)
       2. [R402](#R402)
          1. [Client-400](#Client-400)
    
-   10. [OpenVPN](#OpenVPN)
+6. [OpenVPN](#OpenVPN)
        
-       1. [Installazione del servizio](#Installazione_di_OpenVPN_su_Lubuntu_22.04.3)
+   1. [Installazione del servizio](#Installazione_di_OpenVPN_su_Lubuntu_22.04.3)
 
 ### BGP
 
