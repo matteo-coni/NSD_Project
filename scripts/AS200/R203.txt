@@ -14,8 +14,4 @@ iptables -P OUTPUT DROP
 iptables -A FORWARD -i $LAN -o $NET -j ACCEPT
 iptables -A FORWARD -m state --state ESTABLISHED -j ACCEPT
 
-iptables -A INPUT -p icmp -j ACCEPT
-iptables -A FORWARD -p icmp -j ACCEPT
-iptables -A OUTPUT -p icmp -j ACCEPT
-
 iptables -t nat -A POSTROUTING -o $NET -j MASQUERADE
