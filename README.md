@@ -790,11 +790,14 @@ Di seguito si procede con la configurazione delle singole stazioni all'interno d
   <img width=90% src="images/DC_image.png">
 </p>
 
-Questa sezione illustra l'implementazione di una topologia a due livelli leaf-spine Clos all'interno del data center di AS 300. All'interno della rete cloud, ci sono due tenant (A e B), ciascuno ospita due macchine virtuali collegate a leaf1 e leaf2. A ciascun tenant viene assegnato un dominio di broadcast, garantendo segmentazione e isolamento distinti per i rispettivi ambienti. La configurazione è adattata per soddisfare requisiti specifici:
+Questa sezione illustra l'implementazione di una topologia a due livelli leaf-spine Clos all'interno del data center di AS 300. All'interno della rete cloud, ci sono due tenant (A e B), ciascuno ospita due macchine virtuali collegate a leaf1 e leaf2. A ciascun tenant viene assegnato un dominio di broadcast, garantendo segmentazione e isolamento distinti per i rispettivi ambienti.
 
-1. Realizzare l'instradamento VXLAN/EVPN nella rete DC per fornire L2VPNs tra le macchine di un tenant.
+> - Realize VXLAN/EVPN forwarding in the DC network to provide L2VPNs between the
+tenants’ machines
+> - In L1, enable the connectivity to the external network. In other words, both tenants’
+machines must reach the external network through the link between L1 and R303,
+including the encapsulation in OpenVPN tunnels when necessary.
 
-2. Due interfacce VXLAN L3VNI che permettono per abilitare la connettività verso l'esterno tenendo separati i domini di broadcast associati a rispettivi tenant A e tenant B.
    
    Per completezza, si specifica che le due spines e le due leaf sono macchine virtuali contenenti Cumulus Linux v.4.1.0
 - #### Spines
